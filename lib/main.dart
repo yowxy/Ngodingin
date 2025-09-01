@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hology_fe/features/pages/auth/signin_pages.dart';
+import 'package:hology_fe/features/pages/auth/signup_pages.dart';
 import 'package:hology_fe/features/pages/splash_screen.dart';
 import 'package:hology_fe/shared/theme.dart';
 
@@ -28,6 +30,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/': (context) => const SplashPage(),
+        '/sign-in':(context) =>  SigninPages(),
+        '/sign-up':(context) =>  SignupPages(),
       },
     );
   }

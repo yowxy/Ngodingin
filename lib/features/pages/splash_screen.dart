@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
             SizedBox(
               width: 447,
               height: 447,
-              child: Image.asset('assets/splash_image.png'),
+              child: Image.asset('assets/splash_image_bg.png'),
             ),
 
             Text(
@@ -47,7 +47,7 @@ class _SplashPageState extends State<SplashPage> {
           onPressed: () {
             Navigator.pushNamedAndRemoveUntil(
               context,
-              '/register',
+              '/sign-up',
               (route) => false,
             );
           },
@@ -74,14 +74,12 @@ class _SplashPageState extends State<SplashPage> {
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      Navigator.pushNamed(context, '/login'); // ganti ke route login
+                      Navigator.pushNamed(context, '/sign-in'); // ganti ke route login
                     },
                 ),
               ],
             ),
           ),
-
-
           ],
         ),
       ),
