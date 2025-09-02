@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hology_fe/features/pages/splash_screen.dart';
-import 'package:hology_fe/shared/theme.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hology_fe/features/home/screens/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,26 +9,15 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
- @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Pendidikan',
       theme: ThemeData(
-        scaffoldBackgroundColor: whiteBackgroundColor,
-        appBarTheme: AppBarTheme(
-          backgroundColor: whiteBackgroundColor,
-          elevation: 0,
-          centerTitle: true,
-          iconTheme: IconThemeData(
-            color: blackColor,
-          )
-        )
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        fontFamily: GoogleFonts.poppins().fontFamily
       ),
-      debugShowCheckedModeBanner: false,
-      routes: {
-        '/': (context) => const SplashPage(),
-      },
+      home: const Home(),
     );
   }
 }
