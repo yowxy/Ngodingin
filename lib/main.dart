@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hology_fe/features/pages/auth/signin_pages.dart';
-import 'package:hology_fe/features/pages/auth/signup_pages.dart';
+import 'package:hology_fe/features/auth/signin_pages.dart';
+import 'package:hology_fe/features/auth/signup_pages.dart';
+import 'package:hology_fe/features/email-verification/email-verification_screen.dart';
+import 'package:hology_fe/features/email-verification/resend-verification_screen.dart';
+import 'package:hology_fe/features/forgot-password/forgot-password_screen.dart';
+import 'package:hology_fe/features/forgot-password/reset-password_screen.dart';
 import 'package:hology_fe/features/pages/splash_screen.dart';
 import 'package:hology_fe/shared/theme.dart';
 
@@ -11,9 +15,9 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
-  @override
  @override
+ @override
+
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
@@ -32,6 +36,10 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashPage(),
         '/sign-in':(context) =>  SigninPages(),
         '/sign-up':(context) =>  SignupPages(),
+        '/forgot-password':(context) => ForgotPasswordPages(),
+        '/reset-password' : (context) => ResetPasswordPages(),
+        '/email-verification': (context) => emailVerificationPages(),
+        '/resend-verivication': (context) => resendVerifPages(),
       },
     );
   }

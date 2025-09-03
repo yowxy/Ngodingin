@@ -125,7 +125,7 @@ class _SigninPagesState extends State<SigninPages> {
               const Spacer(),
               GestureDetector(
                 onTap: () {
-                  // TODO: Tambah navigasi ke lupa password
+                  Navigator.pushNamedAndRemoveUntil(context, '/forgot-password', (route) => false);
                 },
                 child: Text(
                   'Lupa Password',
@@ -156,7 +156,7 @@ class _SigninPagesState extends State<SigninPages> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/signup');
+                  Navigator.pushNamedAndRemoveUntil(context, '/signup',(route) => false);
                 },
                 child: Text(
                   'Daftar',

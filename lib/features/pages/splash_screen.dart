@@ -38,9 +38,8 @@ class _SplashPageState extends State<SplashPage> {
               height: 30,
             ),
 
-
           
-          CustomButton(
+        CustomButton(
           title: 'Register',
           width: 350, // ganti lebih besar biar teks muat
           height: 55,
