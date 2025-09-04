@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
 
-class CategorySlider extends StatefulWidget {
-  const CategorySlider({super.key});
+class CategoryTimeSlider extends StatefulWidget {
+  const CategoryTimeSlider({super.key});
 
   @override
-  State<CategorySlider> createState() => _CategorySliderState();
+  State<CategoryTimeSlider> createState() => _CategoryTimeSliderState();
 }
 
-class _CategorySliderState extends State<CategorySlider> {
-  final List<String> categories = [
-    "All",
-    "Frontend",
-    "Backend",
-    "UI/UX",
-    "Machine Learning",
-    "Mobile",
-  ];
+class _CategoryTimeSliderState extends State<CategoryTimeSlider> {
+  int _selectedIndex = 0;
 
-  int selectedIndex = 0;
+  final List<String> categories = ["Semua", "Populer", "Terbaru", "Terlama"];
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +20,12 @@ class _CategorySliderState extends State<CategorySlider> {
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
         itemBuilder: (context, index) {
-          final isSelected = selectedIndex == index;
+          final isSelected = _selectedIndex == index;
 
           return GestureDetector(
             onTap: () {
               setState(() {
-                selectedIndex = index;
+                _selectedIndex = index;
               });
             },
             child: Container(
@@ -48,7 +41,7 @@ class _CategorySliderState extends State<CategorySlider> {
                 style: TextStyle(
                   color: isSelected ? Colors.white : Colors.green.shade400,
                   fontWeight: FontWeight.w500,
-                  fontSize: 12
+                  fontSize: 12,
                 ),
               ),
             ),

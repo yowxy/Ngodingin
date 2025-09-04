@@ -41,13 +41,6 @@ class _HomepageState extends State<Homepage> {
             topLeft: Radius.circular(18),
             topRight: Radius.circular(18),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 8,
-              offset: const Offset(0, -3),
-            ),
-          ],
         ),
         child: SafeArea(
           child: Padding(

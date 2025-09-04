@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class RecommendedCourse extends StatefulWidget {
-  const RecommendedCourse({super.key});
+class RecommendedCourseCard extends StatefulWidget {
+  const RecommendedCourseCard({super.key});
 
   @override
-  State<RecommendedCourse> createState() => _RecommendedCourseState();
+  State<RecommendedCourseCard> createState() => _RecommendedCourseCardState();
 }
 
-class _RecommendedCourseState extends State<RecommendedCourse> {
+class _RecommendedCourseCardState extends State<RecommendedCourseCard> {
   final List<Map<String, String>> courses = [
     {
       "title": "React JS",

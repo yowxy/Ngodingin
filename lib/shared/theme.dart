@@ -15,6 +15,8 @@ TextStyle greenTextStyle = GoogleFonts.poppins(
 
 Color whiteColor = const Color(0xffFFFFFF);
 Color whiteBackgroundColor = const Color (0xffFFFFFF);
+Color grey = const Color(0xff6C6C6C);
+Color lightGrey = const Color(0xffA7A7A7);
 Color blackColor = const Color(0xff14193F);
 Color greenColor = const Color(0xff55B663);
 Color whitegreenColor = const Color(0xffCCEECE);

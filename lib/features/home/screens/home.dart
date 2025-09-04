@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hology_fe/features/home/widgets/category_slider.dart';
-import 'package:hology_fe/features/home/widgets/my_course.dart';
-import 'package:hology_fe/features/home/widgets/recommended_course.dart';
+import 'package:hology_fe/features/home/widgets/category_course_slider.dart';
+import 'package:hology_fe/features/home/widgets/header.dart';
+import 'package:hology_fe/features/home/widgets/my_course_card.dart';
+import 'package:hology_fe/features/home/widgets/recommended_course_card.dart';
+import 'package:hology_fe/shared/theme.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -18,52 +20,16 @@ class _HomeState extends State<Home> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: EdgeInsetsDirectional.symmetric(
-                horizontal: 30,
-                vertical: 10,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Halo,",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.grey.shade700,
-                        ),
-                      ),
-                      Text(
-                        "Moch Djauharil I.",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                    ],
-                  ),
-                  GestureDetector(
-                    child: Image.asset("assets/images/profile.png"),
-                  ),
-                ],
-              ),
-            ),
+            Header(),
             Expanded(
               child: Container(
-                color: Color(0xFFCCEECE),
+                color: whitegreenColor,
                 width: double.infinity,
                 height: double.infinity,
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: EdgeInsetsGeometry.symmetric(
-                      horizontal: 30,
+                      horizontal: 20,
                       vertical: 10,
                     ),
                     child: Column(
@@ -79,8 +45,15 @@ class _HomeState extends State<Home> {
                             textAlignVertical: TextAlignVertical.center,
                             decoration: InputDecoration(
                               hintText: "Cari kursus",
-                              hintStyle: TextStyle(fontSize: 13),
-                              suffixIcon: Icon(Icons.search),
+                              hintStyle: TextStyle(
+                                fontSize: 14,
+                                color: lightGrey,
+                              ),
+                              suffixIcon: Icon(
+                                Icons.search,
+                                size: 28,
+                                color: lightGrey,
+                              ),
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.symmetric(
                                 horizontal: 15,
@@ -99,9 +72,9 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         SizedBox(height: 10),
-                        CategorySlider(),
+                        CategoryCourseSlider(),
                         SizedBox(height: 20),
-                        RecommendedCourse(),
+                        RecommendedCourseCard(),
                         SizedBox(height: 25),
                         Text(
                           "Kursus Kamu",
@@ -111,7 +84,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         SizedBox(height: 10),
-                        MyCourse(),
+                        MyCourseCard(),
                       ],
                     ),
                   ),
