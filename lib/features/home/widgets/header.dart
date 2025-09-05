@@ -39,7 +39,7 @@ class _HeaderState extends State<Header> {
               SizedBox(height: 5),
             ],
           ),
-          GestureDetector(child: Image.asset("assets/images/profile.png")),
+          GestureDetector(child: Image.asset("assets/images/profile.png", height: 40, width: 40)),
         ],
       ),
     );
