@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hology_fe/features/auth/signin_pages.dart';
 import 'package:hology_fe/features/auth/signup_pages.dart';
+import 'package:hology_fe/features/chose_prefrences/chose.prefrences.dart';
 import 'package:hology_fe/features/email-verification/email-verification_screen.dart';
 import 'package:hology_fe/features/email-verification/resend-verification_screen.dart';
 import 'package:hology_fe/features/forgot-password/forgot-password_screen.dart';
@@ -40,7 +41,8 @@ class MyApp extends StatelessWidget {
         '/reset-password' : (context) => ResetPasswordPages(),
         '/email-verification': (context) => emailVerificationPages(),
         '/resend-verivication': (context) => resendVerifPages(),
-      },
+        '/chose-prefrences': (context) => choosePrefrencesPages(),
+       },
     );
   }
 }

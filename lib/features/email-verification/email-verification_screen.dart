@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hology_fe/features/email-verification/resend-verification_screen.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/features/widgets/form.dart';
 import 'package:hology_fe/shared/theme.dart';
@@ -29,91 +30,105 @@ class emailVerificationPages extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        children: [
-          Container(
-             width: 245,
-            height: 234,
-            margin: const EdgeInsets.symmetric(vertical: 20),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/auth_image_bg.png'),
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          children: [
+            Container(
+               width: 245,
+              height: 234,
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/auth_image_bg.png'),
+                ),
               ),
             ),
-          ),
-
-          const SizedBox(height: 20,),
-          
-          Text(
-            'Email',
-            style: blackTextStyle.copyWith(
-              fontWeight: semibold,
-              fontSize: 14,
-            ),
-          ),
-
-          const SizedBox(height: 10,),
-
-          CustomTextForm(
-            controller: emailController, 
-            hintText: "Masukan email anda",
-            obscureText: false, 
-            width: double.infinity, 
-            height: 47
-            ),
-
+        
             const SizedBox(height: 20,),
-
+            
             Text(
-              'Token',
+              'Email',
               style: blackTextStyle.copyWith(
                 fontWeight: semibold,
-                fontSize: 14
+                fontSize: 14,
               ),
             ),
-
-            const SizedBox(height: 12,),
-
+        
+            const SizedBox(height: 10,),
+        
             CustomTextForm(
-              controller: tokenController, 
-              hintText: 'Masukan token dari email anda', 
+              controller: emailController, 
+              hintText: "Masukan email anda",
               obscureText: false, 
               width: double.infinity, 
               height: 47
               ),
-
-              const SizedBox(height: 50,),
-
-              CustomButton(title: 'Verifikasi', width: double.infinity, height: 47),
-
-              const SizedBox(height: 14,),
-
-            Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+        
+              const SizedBox(height: 20,),
+        
               Text(
-                'Kirim email verifikasi lagi ? ',
+                'Token',
                 style: blackTextStyle.copyWith(
-                  fontWeight: reguler,
-                  fontSize: 14,
+                  fontWeight: semibold,
+                  fontSize: 14
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamedAndRemoveUntil(context, '/resend-verivication',(route) => false);
-                },
-                child: Text(
-                  'Kirim',
+        
+              const SizedBox(height: 12,),
+        
+              CustomTextForm(
+                controller: tokenController, 
+                hintText: 'Masukan token dari email anda', 
+                obscureText: false, 
+                width: double.infinity, 
+                height: 47
+                ),
+        
+                const SizedBox(height: 50,),
+        
+                 CustomButton(
+            title: 'Register',
+            width: 350,
+            height: 55,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  resendVerifPages(), // ganti dengan halaman tujuanmu
+                ),
+              );
+            },
+          ),
+        
+                const SizedBox(height: 14,),
+        
+              Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Kirim email verifikasi lagi ? ',
                   style: blackTextStyle.copyWith(
-                    fontWeight: bold,
+                    fontWeight: reguler,
                     fontSize: 14,
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamedAndRemoveUntil(context, '/resend-verivication',(route) => false);
+                  },
+                  child: Text(
+                    'Kirim',
+                    style: blackTextStyle.copyWith(
+                      fontWeight: bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

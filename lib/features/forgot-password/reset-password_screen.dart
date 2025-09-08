@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hology_fe/features/chose_prefrences/chose.prefrences.dart';
+import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/features/widgets/form.dart';
 import 'package:hology_fe/shared/theme.dart';
 
@@ -37,80 +39,101 @@ class _ResetPasswordPagesState extends State<ResetPasswordPages> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        children: [
-          Container(
-            width: 245,
-            height: 234,
-            margin: const EdgeInsets.symmetric(vertical: 20),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/auth_image_bg.png'),
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          children: [
+            Container(
+              width: 245,
+              height: 234,
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/auth_image_bg.png'),
+                ),
               ),
             ),
-          ),
-
-          const SizedBox(height: 20),
-          Text(
-            'Email',
-            style: blackTextStyle.copyWith(
-              fontWeight: semibold,
-              fontSize: 14,
-            ),
-          ),
-          CustomTextForm(
-            controller: emailController,
-            hintText: 'Masukan Email anda',
-            obscureText: false,
-            width: double.infinity,
-            height: 47,
-          ),
-
-          const SizedBox(height: 10),
-          Text(
-            'Token',
-            style: blackTextStyle.copyWith(
-              fontWeight: semibold,
-              fontSize: 14,
-            ),
-          ),
-          const SizedBox(height: 14),
-          CustomTextForm(
-            controller: tokenController,
-            hintText: 'Masukan token dari email',
-            obscureText: false,
-            width: double.infinity,
-            height: 47,
-          ),
-
-          const SizedBox(height: 10),
-          Text(
-            'Kata Sandi',
-            style: blackTextStyle.copyWith(
-              fontWeight: semibold,
-              fontSize: 14,
-            ),
-          ),
-          const SizedBox(height: 14),
-          CustomTextForm(
-            controller: passwordController,
-            hintText: 'Masukan Kata sandi',
-            obscureText: _isObscure,
-            width: double.infinity,
-            height: 47,
-            suffixIcon: IconButton(
-              icon: Icon(
-                _isObscure ? Icons.visibility_off : Icons.visibility,
+        
+            const SizedBox(height: 20),
+            Text(
+              'Email',
+              style: blackTextStyle.copyWith(
+                fontWeight: semibold,
+                fontSize: 14,
               ),
-              onPressed: () {
-                setState(() {
-                  _isObscure = !_isObscure;
-                });
-              },
             ),
-          ),
-        ],
+
+            const SizedBox(height: 10,),
+
+            CustomTextForm(
+              controller: emailController,
+              hintText: 'Masukan Email anda',
+              obscureText: false,
+              width: double.infinity,
+              height: 47,
+            ),
+        
+            const SizedBox(height: 10),
+            Text(
+              'Token',
+              style: blackTextStyle.copyWith(
+                fontWeight: semibold,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 14),
+            CustomTextForm(
+              controller: tokenController,
+              hintText: 'Masukan token dari email',
+              obscureText: false,
+              width: double.infinity,
+              height: 47,
+            ),
+        
+            const SizedBox(height: 10),
+            Text(
+              'Kata Sandi',
+              style: blackTextStyle.copyWith(
+                fontWeight: semibold,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 14),
+            CustomTextForm(
+              controller: passwordController,
+              hintText: 'Masukan Kata sandi',
+              obscureText: _isObscure,
+              width: double.infinity,
+              height: 47,
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _isObscure ? Icons.visibility_off : Icons.visibility,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _isObscure = !_isObscure;
+                  });
+                },
+              ),
+            ),
+
+            const SizedBox(height:  30,),
+
+          CustomButton(
+          title: 'Konfirmasi',
+          width: 350,
+          height: 55,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => choosePrefrencesPages(), // ganti dengan halaman tujuanmu
+              ),
+            );
+          },
+        ),
+          ],
+        ),
       ),
     );
   }
