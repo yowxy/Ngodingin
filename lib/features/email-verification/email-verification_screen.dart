@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hology_fe/features/chose_prefrences/chose.prefrences.dart';
 import 'package:hology_fe/features/email-verification/resend-verification_screen.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/features/widgets/form.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:provider/provider.dart';
+import 'package:hology_fe/providers/AuthProvider/auth_provider.dart';
+import 'package:hology_fe/utils/snack_message.dart';
 
 class emailVerificationPages extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -88,16 +92,36 @@ class emailVerificationPages extends StatelessWidget {
                 const SizedBox(height: 50,),
         
                  CustomButton(
-            title: 'Register',
+            title: 'Verifikasi',
             width: 350,
             height: 55,
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>  resendVerifPages(), // ganti dengan halaman tujuanmu
-                ),
+              if (emailController.text.isEmpty || tokenController.text.isEmpty) {
+                errorMessage(
+                  message: 'Email dan token tidak boleh kosong!',
+                  context: context,
+                );
+                return;
+              }
+              Provider.of<AuthenticationProvider>(context, listen: false).emailVerification(
+                email: emailController.text.trim(),
+                token: tokenController.text.trim(),
+                context: context,
               );
+              final provider = Provider.of<AuthenticationProvider>(context, listen: false);
+              if (provider.resMessage.isNotEmpty) {
+                if (provider.resMessage.toLowerCase().contains('berhasil') || provider.resMessage.toLowerCase().contains('success')) {
+                  successMessage(
+                    message: provider.resMessage,
+                    context: context,
+                  );
+                } else {
+                  errorMessage(
+                    message: provider.resMessage,
+                    context: context,
+                  );
+                }
+              }
             },
           ),
         
@@ -115,7 +139,7 @@ class emailVerificationPages extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(context, '/resend-verivication',(route) => false);
+                    Navigator.pushNamedAndRemoveUntil(context, '/resend-verification',(route) => false);
                   },
                   child: Text(
                     'Kirim',

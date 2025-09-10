@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hology_fe/features/chose_prefrences/chose.prefrences.dart';
+import 'package:hology_fe/features/email-verification/email-verification_screen.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/features/widgets/form.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:provider/provider.dart';
+import 'package:hology_fe/providers/AuthProvider/auth_provider.dart';
+import 'package:hology_fe/utils/snack_message.dart';
 
 class resendVerifPages extends StatelessWidget {
 
@@ -71,16 +75,35 @@ class resendVerifPages extends StatelessWidget {
               const SizedBox(height: 48,),
         
                CustomButton(
-            title: 'Verifikasi',
+            title: 'Kirim Kode Verifikasi',
             width: 350,
             height: 55,
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => choosePrefrencesPages(), // ganti dengan halaman tujuanmu
-                ),
+              if (emailController.text.isEmpty) {
+                errorMessage(
+                  message: 'Email tidak boleh kosong!',
+                  context: context,
+                );
+                return;
+              }
+              Provider.of<AuthenticationProvider>(context, listen: false).resendVerificationEmail(
+                email: emailController.text.trim(),
+                context: context,
               );
+              final provider = Provider.of<AuthenticationProvider>(context, listen: false);
+              if (provider.resMessage.isNotEmpty) {
+                if (provider.resMessage.toLowerCase().contains('berhasil') || provider.resMessage.toLowerCase().contains('success')) {
+                  successMessage(
+                    message: provider.resMessage,
+                    context: context,
+                  );
+                } else {
+                  errorMessage(
+                    message: provider.resMessage,
+                    context: context,
+                  );
+                }
+              }
             },
           ),
           ],

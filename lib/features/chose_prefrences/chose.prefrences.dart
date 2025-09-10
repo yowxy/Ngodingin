@@ -63,7 +63,14 @@ class choosePrefrencesPages extends StatelessWidget {
                   ],
                 ),
               ),
-              CustomButton(title: 'Simpan', width: double.infinity, height: 47),
+              CustomButton(
+                title: 'Simpan', 
+                width: double.infinity, 
+                height: 47, 
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(context, '/home',(route) => false);
+                } 
+              )
             ],
           ),
         ),

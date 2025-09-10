@@ -27,6 +27,7 @@ Color blackColor = const Color(0xff14193F);
 Color greenColor = const Color(0xff55B663);
 Color whitegreenColor = const Color(0xffCCEECE);
 Color orangeColor = const Color(0xffF9A620);
+Color redBackgroundColor = const Color(0xffF44336);
 
 FontWeight light = FontWeight.w300;
 FontWeight reguler = FontWeight.w400;

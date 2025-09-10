@@ -50,7 +50,7 @@ class _SplashPageState extends State<SplashPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => emailVerificationPages(), // ganti dengan halaman tujuanmu
+                builder: (context) => const SignupPages (), // ganti dengan halaman tujuanmu
               ),
             );
           },

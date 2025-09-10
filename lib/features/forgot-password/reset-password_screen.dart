@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hology_fe/features/auth/signin_pages.dart';
 import 'package:hology_fe/features/chose_prefrences/chose.prefrences.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/features/widgets/form.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:provider/provider.dart';
+import 'package:hology_fe/providers/AuthProvider/auth_provider.dart';
+import 'package:hology_fe/utils/snack_message.dart';
 
 class ResetPasswordPages extends StatefulWidget {
   const ResetPasswordPages({super.key});
@@ -124,12 +128,33 @@ class _ResetPasswordPagesState extends State<ResetPasswordPages> {
           width: 350,
           height: 55,
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => choosePrefrencesPages(), // ganti dengan halaman tujuanmu
-              ),
+            if (emailController.text.isEmpty || tokenController.text.isEmpty || passwordController.text.isEmpty) {
+              errorMessage(
+                message: 'Email, token, dan kata sandi tidak boleh kosong!',
+                context: context,
+              );
+              return;
+            }
+            Provider.of<AuthenticationProvider>(context, listen: false).resetPassword(
+              email: emailController.text.trim(),
+              token: tokenController.text.trim(),
+              newPassword: passwordController.text.trim(),
+              context: context,
             );
+            final provider = Provider.of<AuthenticationProvider>(context, listen: false);
+            if (provider.resMessage.isNotEmpty) {
+              if (provider.resMessage.toLowerCase().contains('berhasil') || provider.resMessage.toLowerCase().contains('password')) {
+                successMessage(
+                  message: provider.resMessage,
+                  context: context,
+                );
+              } else {
+                errorMessage(
+                  message: provider.resMessage,
+                  context: context,
+                );
+              }
+            }
           },
         ),
           ],

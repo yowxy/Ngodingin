@@ -11,9 +11,19 @@ import 'package:hology_fe/features/forgot-password/forgot-password_screen.dart';
 import 'package:hology_fe/features/forgot-password/reset-password_screen.dart';
 import 'package:hology_fe/features/pages/splash_screen.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:provider/provider.dart';
+import 'package:hology_fe/providers/AuthProvider/auth_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
+        // provider lain...
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -25,10 +35,10 @@ class MyApp extends StatelessWidget {
       title: 'Pendidikan',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        fontFamily: GoogleFonts.poppins().fontFamily
+        fontFamily: GoogleFonts.poppins().fontFamily,
       ),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: '/', 
       routes: {
         '/': (context) => const SplashPage(),
         '/sign-in': (context) => SigninPages(),

@@ -1,8 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hology_fe/features/auth/signin_pages.dart';
+import 'package:hology_fe/features/email-verification/email-verification_screen.dart';
 import 'package:hology_fe/features/widgets/form.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:provider/provider.dart';
+import 'package:hology_fe/providers/AuthProvider/auth_provider.dart';
+import 'package:hology_fe/utils/snack_message.dart';
 
 class SignupPages extends StatefulWidget {
   const SignupPages({super.key});
@@ -46,7 +51,7 @@ class _SignupPagesState extends State<SignupPages> {
               margin: const EdgeInsets.symmetric(vertical: 20),
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/auth_image_bg.png'),
+                  image: AssetImage('assets/images/auth_image_bg.png'),
                 ),
               ),
             ),
@@ -124,15 +129,33 @@ class _SignupPagesState extends State<SignupPages> {
               width: 388,
               height: 55,
               onPressed: () {
-                // Gunakan CupertinoPageRoute biar bisa swipe-back
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Placeholder(), 
-                    // ganti Placeholder dengan halaman "ChosePreferencesPage"
-                  ),
-                  (route) => false,
+                if (namaController.text.isEmpty || emailController.text.isEmpty || passwordController.text.isEmpty) {
+                  errorMessage(
+                    message: 'Nama, email, dan password tidak boleh kosong!',
+                    context: context,
+                  );
+                  return;
+                }
+                Provider.of<AuthenticationProvider>(context, listen: false).registerUser(
+                  name: namaController.text.trim(),
+                  email: emailController.text.trim(),
+                  password: passwordController.text.trim(),
+                  context: context,
                 );
+                final provider = Provider.of<AuthenticationProvider>(context, listen: false);
+                if (provider.resMessage.isNotEmpty) {
+                  if (provider.resMessage.toLowerCase().contains('success') || provider.resMessage.toLowerCase().contains('created')) {
+                    successMessage(
+                      message: provider.resMessage,
+                      context: context,
+                    );
+                  } else {
+                    errorMessage(
+                      message: provider.resMessage,
+                      context: context,
+                    );
+                  }
+                }
               },
             ),
 
@@ -154,7 +177,7 @@ class _SignupPagesState extends State<SignupPages> {
                     Navigator.pushAndRemoveUntil(
                       context,
                       CupertinoPageRoute(
-                        builder: (context) => const Placeholder(),
+                        builder: (context) => const SigninPages(),
                         // ganti Placeholder dengan SigninPage
                       ),
                       (route) => false,

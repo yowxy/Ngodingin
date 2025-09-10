@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hology_fe/features/chose_prefrences/chose.prefrences.dart';
+import 'package:hology_fe/features/home/screens/homepage.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/features/widgets/form.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:hology_fe/utils/snack_message.dart';
+import 'package:provider/provider.dart';
+import 'package:hology_fe/providers/AuthProvider/auth_provider.dart';
 
 class SigninPages extends StatefulWidget {
   const SigninPages({super.key});
@@ -143,18 +146,39 @@ class _SigninPagesState extends State<SigninPages> {
             const SizedBox(height: 10),
         
             CustomButton(
-          title: 'Register',
-          width: 350,
-          height: 55,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => choosePrefrencesPages(), // ganti dengan halaman tujuanmu
-              ),
-            );
-          },
-        ),
+              title: 'Masuk',
+              width: 350,
+              height: 55,
+              onPressed: () {
+                if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+                  errorMessage(
+                    message: 'Email dan password tidak boleh kosong!',
+                    context: context,
+                  );
+                  return;
+                }
+                Provider.of<AuthenticationProvider>(context, listen: false).loginUser(
+                  email: emailController.text.trim(),
+                  password: passwordController.text.trim(),
+                  context: context,
+                );
+                final provider = Provider.of<AuthenticationProvider>(context, listen: false);
+                // Tampilkan pesan sesuai status dari response
+                if (provider.resMessage.isNotEmpty) {
+                  if (provider.resMessage.toLowerCase().contains('success') || provider.resMessage.toLowerCase().contains('berhasil')) {
+                    successMessage(
+                      message: provider.resMessage,
+                      context: context,
+                    );
+                  } else {
+                    errorMessage(
+                      message: provider.resMessage,
+                      context: context,
+                    );
+                  }
+                }
+              },
+            ),
         
             const SizedBox(height: 10),
         
@@ -170,7 +194,7 @@ class _SigninPagesState extends State<SigninPages> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(context, '/signup',(route) => false);
+                    Navigator.pushNamedAndRemoveUntil(context, '/sign-up',(route) => false);
                   },
                   child: Text(
                     'Daftar',
