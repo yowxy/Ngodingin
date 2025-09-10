@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hology_fe/features/home/widgets/category_course_slider.dart';
 import 'package:hology_fe/features/home/widgets/header.dart';
-import 'package:hology_fe/features/home/widgets/my_course_card.dart';
+import 'package:hology_fe/features/home/widgets/my_course_list.dart';
 import 'package:hology_fe/features/home/widgets/recommended_course_card.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:provider/provider.dart';
+import 'package:hology_fe/providers/HomeProvider/home_data_provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -43,6 +45,9 @@ class _HomeState extends State<Home> {
                           ),
                           child: TextField(
                             textAlignVertical: TextAlignVertical.center,
+                            onChanged: (value) {
+                              Provider.of<HomeDataProvider>(context, listen: false).setSearchQuery(value);
+                            },
                             decoration: InputDecoration(
                               hintText: "Cari kursus",
                               hintStyle: TextStyle(
@@ -84,7 +89,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         SizedBox(height: 10),
-                        MyCourseCard(),
+                        MyCourseList(),
                       ],
                     ),
                   ),

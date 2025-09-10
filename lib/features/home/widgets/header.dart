@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:hology_fe/providers/HomeProvider/home_provider.dart';
 
 class Header extends StatefulWidget {
   const Header({super.key});
@@ -10,7 +12,17 @@ class Header extends StatefulWidget {
 
 class _HeaderState extends State<Header> {
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      Provider.of<HomeProvider>(context, listen: false).fetchUser(context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final homeProvider = Provider.of<HomeProvider>(context);
+    final userName = homeProvider.user?.name ?? "";
     return Padding(
       padding: EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 10),
       child: Row(
@@ -29,7 +41,7 @@ class _HeaderState extends State<Header> {
                 ),
               ),
               Text(
-                "Moch Djauharil I.",
+                userName,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,

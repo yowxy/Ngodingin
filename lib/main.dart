@@ -13,12 +13,16 @@ import 'package:hology_fe/features/pages/splash_screen.dart';
 import 'package:hology_fe/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:hology_fe/providers/AuthProvider/auth_provider.dart';
+import 'package:hology_fe/providers/HomeProvider/home_provider.dart';
+import 'package:hology_fe/providers/HomeProvider/home_data_provider.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
+        ChangeNotifierProvider(create: (_) => HomeProvider()),
+        ChangeNotifierProvider(create: (_) => HomeDataProvider()),
         // provider lain...
       ],
       child: const MyApp(),
@@ -38,7 +42,7 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.poppins().fontFamily,
       ),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/', 
+      initialRoute: '/',
       routes: {
         '/': (context) => const SplashPage(),
         '/sign-in': (context) => SigninPages(),

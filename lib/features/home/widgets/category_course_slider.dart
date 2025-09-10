@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:hology_fe/providers/HomeProvider/home_data_provider.dart';
 
 class CategoryCourseSlider extends StatefulWidget {
   const CategoryCourseSlider({super.key});
@@ -10,17 +12,28 @@ class CategoryCourseSlider extends StatefulWidget {
 class _CategoryCourseSliderState extends State<CategoryCourseSlider> {
   int _selectedIndex = 0;
 
-  final List<String> categories = [
-    "All",
-    "Frontend",
-    "Backend",
-    "UI/UX",
-    "Machine Learning",
-    "Mobile",
-  ];
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      Provider.of<HomeDataProvider>(context, listen: false).fetchCategories();
+      Provider.of<HomeDataProvider>(context, listen: false).fetchHomeData();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final homeDataProvider = Provider.of<HomeDataProvider>(context);
+    final categories = homeDataProvider.categories.isNotEmpty
+        ? homeDataProvider.categories
+        : [
+            "Semua",
+            "Frontend",
+            "Backend",
+            "UI/UX",
+            "Machine Learning",
+            "Mobile"
+          ];
     return SizedBox(
       height: 30,
       child: ListView.builder(
@@ -28,12 +41,12 @@ class _CategoryCourseSliderState extends State<CategoryCourseSlider> {
         itemCount: categories.length,
         itemBuilder: (context, index) {
           final isSelected = _selectedIndex == index;
-
           return GestureDetector(
             onTap: () {
               setState(() {
                 _selectedIndex = index;
               });
+              homeDataProvider.setCategory(categories[index]);
             },
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 3),

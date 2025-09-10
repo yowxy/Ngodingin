@@ -1,44 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:hology_fe/models/enrolled_course_model.dart';
+import 'package:hology_fe/providers/HomeProvider/home_data_provider.dart';
 import 'package:hology_fe/shared/theme.dart';
 
-class MyCourseList extends StatefulWidget {
+class MyCourseList extends StatelessWidget {
   const MyCourseList({super.key});
 
   @override
-  State<MyCourseList> createState() => _MyCourseListState();
-}
-
-class _MyCourseListState extends State<MyCourseList> {
-  final List<Map<String, String>> courses = [
-    {
-      "title": "React JS",
-      "progress": "70%",
-      "image": "assets/images/react.png",
-    },
-    {
-      "title": "Flutter",
-      "progress": "70%",
-      "image": "assets/images/flutter.png",
-    },
-    {
-      "title": "Python",
-      "progress": "90%.",
-      "image": "assets/images/python.png",
-    },
-    {
-      "title": "Python",
-      "progress": "90%.",
-      "image": "assets/images/python.png",
-    },
-    {
-      "title": "Python",
-      "progress": "90%.",
-      "image": "assets/images/python.png",
-    },
-  ];
-
-  @override
   Widget build(BuildContext context) {
+    final homeDataProvider = Provider.of<HomeDataProvider>(context);
+    final courses = homeDataProvider.enrolledCourses;
+    if (homeDataProvider.isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+    if (courses.isEmpty) {
+      return Center(child: Text('Belum ada kursus yang diikuti'));
+    }
     return ListView.builder(
       physics: const BouncingScrollPhysics(),
       itemCount: courses.length,
@@ -61,7 +39,9 @@ class _MyCourseListState extends State<MyCourseList> {
           ),
           child: Row(
             children: [
-              Image.asset(course["image"]!, height: 120, width: 120),
+              course.image.isNotEmpty
+                  ? Image.network(course.image, height: 120, width: 120)
+                  : Container(height: 120, width: 120, color: Colors.grey[300]),
               const SizedBox(width: 15),
               Expanded(
                 child: Column(
@@ -73,13 +53,13 @@ class _MyCourseListState extends State<MyCourseList> {
                       children: [
                         Flexible(
                           child: Text(
-                            course["title"]!,
+                            course.title,
                             style: TextStyle(fontSize: 14, fontWeight: semibold),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         Text(
-                          course["progress"]!,
+                          course.progress,
                           style: TextStyle(fontSize: 16, fontWeight: semibold),
                         ),
                       ],
