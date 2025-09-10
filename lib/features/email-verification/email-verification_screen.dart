@@ -88,7 +88,7 @@ class emailVerificationPages extends StatelessWidget {
                 const SizedBox(height: 50,),
         
                  CustomButton(
-            title: 'Register',
+            title: 'Verifikasi',
             width: 350,
             height: 55,
             onPressed: () {

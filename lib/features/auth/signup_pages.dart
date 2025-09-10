@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hology_fe/features/email-verification/email-verification_screen.dart';
 import 'package:hology_fe/features/widgets/form.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/shared/theme.dart';
@@ -46,7 +47,7 @@ class _SignupPagesState extends State<SignupPages> {
               margin: const EdgeInsets.symmetric(vertical: 20),
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/auth_image_bg.png'),
+                  image: AssetImage('assets/images/auth_image_bg.png'),
                 ),
               ),
             ),
@@ -119,22 +120,20 @@ class _SignupPagesState extends State<SignupPages> {
             const SizedBox(height: 15),
 
             // Tombol daftar
-            CustomButton(
-              title: 'Daftar',
-              width: 388,
-              height: 55,
-              onPressed: () {
-                // Gunakan CupertinoPageRoute biar bisa swipe-back
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Placeholder(), 
-                    // ganti Placeholder dengan halaman "ChosePreferencesPage"
-                  ),
-                  (route) => false,
-                );
-              },
-            ),
+              CustomButton(
+          title: 'Register',
+          width: 350,
+          height: 55,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => emailVerificationPages(), // ganti dengan halaman tujuanmu
+              ),
+            );
+          },
+        ),
+        
 
             const SizedBox(height: 30),
 

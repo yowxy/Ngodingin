@@ -7,7 +7,9 @@ import 'package:hology_fe/features/email-verification/resend-verification_screen
 import 'package:hology_fe/features/forgot-password/forgot-password_screen.dart';
 import 'package:hology_fe/features/forgot-password/reset-password_screen.dart';
 import 'package:hology_fe/features/pages/splash_screen.dart';
+import 'package:hology_fe/features/quiz/quiz_screen.dart';
 import 'package:hology_fe/shared/theme.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -42,6 +44,7 @@ class MyApp extends StatelessWidget {
         '/email-verification': (context) => emailVerificationPages(),
         '/resend-verivication': (context) => resendVerifPages(),
         '/chose-prefrences': (context) => choosePrefrencesPages(),
+        '/quiz': (context) => QuizPages(),
        },
     );
   }
