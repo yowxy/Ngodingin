@@ -9,13 +9,41 @@ class Header extends StatefulWidget {
 }
 
 class _HeaderState extends State<Header> {
+  void _showLogoutMenu(BuildContext context) async {
+    final result = await showMenu(
+      context: context,
+      position: const RelativeRect.fromLTRB(1000, 110, 0, 0),
+      items: [
+        PopupMenuItem(
+          value: 'logout',
+          child: Row(
+            children: [
+              const Icon(Icons.logout, color: Colors.red, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                "Logout",
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+
+    if (result == 'logout') {
+      print("Logout tapped");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,10 +64,29 @@ class _HeaderState extends State<Header> {
                   color: Colors.black,
                 ),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
             ],
           ),
-          GestureDetector(child: Image.asset("assets/images/profile.png", height: 40, width: 40)),
+          GestureDetector(
+            onTap: () => _showLogoutMenu(context),
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: greenColor,
+                  width: 2,
+                ),
+              ),
+              child: ClipOval(
+                child: Image.asset(
+                  "assets/images/profile.png",
+                  height: 40,
+                  width: 40,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
