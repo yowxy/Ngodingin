@@ -13,21 +13,36 @@ class _HeaderState extends State<Header> {
     final result = await showMenu(
       context: context,
       position: const RelativeRect.fromLTRB(1000, 110, 0, 0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: Colors.transparent,
+      elevation: 0,
       items: [
         PopupMenuItem(
           value: 'logout',
-          child: Row(
-            children: [
-              const Icon(Icons.logout, color: Colors.red, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                "Logout",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.w500,
+          height: 40,
+          padding: EdgeInsets.zero,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: whiteColor,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Icon(Icons.logout, color: Colors.red, size: 18),
+
+                const SizedBox(width: 10),
+                Text(
+                  "Logout",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
@@ -72,10 +87,14 @@ class _HeaderState extends State<Header> {
             child: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: greenColor,
-                  width: 2,
-                ),
+                border: Border.all(color: Colors.white, width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
               ),
               child: ClipOval(
                 child: Image.asset(

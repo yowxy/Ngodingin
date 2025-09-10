@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hology_fe/features/home/screens/home.dart';
 import 'package:hology_fe/features/home/screens/homepage.dart';
 
 void main() {
