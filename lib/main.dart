@@ -10,11 +10,13 @@ import 'package:hology_fe/features/email-verification/resend-verification_screen
 import 'package:hology_fe/features/forgot-password/forgot-password_screen.dart';
 import 'package:hology_fe/features/forgot-password/reset-password_screen.dart';
 import 'package:hology_fe/features/pages/splash_screen.dart';
+import 'package:hology_fe/features/quiz/quiz_screen.dart';
 import 'package:hology_fe/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:hology_fe/providers/AuthProvider/auth_provider.dart';
 import 'package:hology_fe/providers/HomeProvider/home_provider.dart';
 import 'package:hology_fe/providers/HomeProvider/home_data_provider.dart';
+
 
 void main() {
   runApp(
@@ -53,7 +55,8 @@ class MyApp extends StatelessWidget {
         '/resend-verification': (context) => resendVerifPages(),
         '/choose-preferences': (context) => choosePrefrencesPages(),
         '/home': (context) => const Homepage(),
-      },
+        '/quiz': (context) => QuizPages(),
+       },
     );
   }
 }

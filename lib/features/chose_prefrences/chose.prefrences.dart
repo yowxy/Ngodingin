@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hology_fe/features/chose_prefrences/widget/CustomButtonRefrences.dart';
+import 'package:hology_fe/features/quiz/quiz_screen.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/shared/theme.dart';
 
@@ -63,14 +64,20 @@ class choosePrefrencesPages extends StatelessWidget {
                   ],
                 ),
               ),
-              CustomButton(
-                title: 'Simpan', 
-                width: double.infinity, 
-                height: 47, 
-                onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(context, '/home',(route) => false);
-                } 
-              )
+               CustomButton(
+          title: 'Simpan',
+          width: 350,
+          height: 55,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => QuizPages(), // ganti dengan halaman tujuanmu
+              ),
+            );
+          },
+        ),
+        
             ],
           ),
         ),
