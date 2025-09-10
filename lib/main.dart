@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hology_fe/features/home/screens/home.dart';
 import 'package:hology_fe/features/home/screens/homepage.dart';
 import 'package:hology_fe/features/auth/signin_pages.dart';
 import 'package:hology_fe/features/auth/signup_pages.dart';
@@ -44,19 +43,7 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.poppins().fontFamily,
       ),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const SplashPage(),
-        '/sign-in': (context) => SigninPages(),
-        '/sign-up': (context) => SignupPages(),
-        '/forgot-password': (context) => ForgotPasswordPages(),
-        '/reset-password': (context) => ResetPasswordPages(),
-        '/email-verification': (context) => emailVerificationPages(),
-        '/resend-verification': (context) => resendVerifPages(),
-        '/choose-preferences': (context) => choosePrefrencesPages(),
-        '/home': (context) => const Homepage(),
-        '/quiz': (context) => QuizPages(),
-       },
+      home: const Homepage(),
     );
   }
 }
