@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:hology_fe/features/auth/signup_pages.dart';
+import 'package:hology_fe/features/auth/signin_pages.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/shared/theme.dart';
 
@@ -77,7 +78,12 @@ class _SplashPageState extends State<SplashPage> {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        Navigator.pushNamed(context, '/sign-in'); // ganti ke route login
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SigninPages(),
+                          ),
+                        );
                       },
                   ),
                 ],

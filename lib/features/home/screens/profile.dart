@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hology_fe/features/home/widgets/header.dart';
 import 'package:hology_fe/features/home/widgets/my_course_list.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:provider/provider.dart';
+import 'package:hology_fe/providers/ProfileProvider/profile_provider.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -12,7 +14,19 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      final provider = Provider.of<ProfileProvider>(context, listen: false);
+      provider.fetchProfile();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
+    final userProfile = profileProvider.userProfile;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -58,15 +72,20 @@ class _ProfileState extends State<Profile> {
                           ],
                         ),
                         child: ClipOval(
-                          child: Image.asset(
-                            "assets/images/profile.png",
-                            fit: BoxFit.cover,
-                          ),
+                          child: userProfile?.profile?.photo != null && userProfile!.profile!.photo!.isNotEmpty
+                              ? Image.network(
+                                  userProfile.profile!.photo!,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset(
+                                  "assets/images/profile.png",
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       ),
                     ),
                   ),
-                  
+
                   Positioned(
                     top: 215,
                     right: 0,
@@ -86,7 +105,9 @@ class _ProfileState extends State<Profile> {
                                 borderRadius: BorderRadius.circular(99),
                               ),
                               child: Text(
-                                "Level 69",
+                                userProfile?.profile?.level != null
+                                    ? "Level ${userProfile!.profile!.level}"
+                                    : "Level -",
                                 style: TextStyle(
                                   color: whiteColor,
                                   fontSize: 12,
@@ -95,7 +116,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              "Moch Djauharil Ilmi",
+                              userProfile?.name ?? "-",
                               style: TextStyle(
                                 fontWeight: semibold,
                                 fontSize: 16,
@@ -103,12 +124,23 @@ class _ProfileState extends State<Profile> {
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              "mdjauharil29@gmail.com",
+                              userProfile?.email ?? "-",
                               style: TextStyle(
                                 color: lightGrey,
                                 fontSize: 12,
                               ),
                             ),
+                            if (userProfile?.profile?.totalXp != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  "XP: ${userProfile!.profile!.totalXp} / ${userProfile.profile!.nextLevelXp ?? '-'}",
+                                  style: TextStyle(
+                                    color: greenColor,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
                       ),

@@ -27,10 +27,9 @@ class _HomeState extends State<Home> {
               child: Container(
                 color: whitegreenColor,
                 width: double.infinity,
-                height: double.infinity,
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: EdgeInsetsGeometry.symmetric(
+                    padding: EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 10,
                     ),
@@ -90,6 +89,7 @@ class _HomeState extends State<Home> {
                         ),
                         SizedBox(height: 10),
                         MyCourseList(),
+                        SizedBox(height: 20), // Tambahan agar tidak overflow di bawah
                       ],
                     ),
                   ),

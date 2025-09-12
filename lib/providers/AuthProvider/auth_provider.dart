@@ -57,7 +57,8 @@ class AuthenticationProvider extends ChangeNotifier {
           message: _resMessage,
           context: context!,
         );
-        await Future.delayed(const Duration(milliseconds: 1200));
+
+        await Future.delayed(const Duration(milliseconds: 800));
         Navigator.pushAndRemoveUntil(
           context!,
           MaterialPageRoute(builder: (context) => emailVerificationPages()),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:hology_fe/providers/HomeProvider/course_list_provider.dart';
 
 class CategoryTimeSlider extends StatefulWidget {
   const CategoryTimeSlider({super.key});
@@ -11,6 +13,7 @@ class _CategoryTimeSliderState extends State<CategoryTimeSlider> {
   int _selectedIndex = 0;
 
   final List<String> categories = ["Semua", "Populer", "Terbaru", "Terlama"];
+  final List<String> filters = ["all", "popular", "terbaru", "terlama"];
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +30,8 @@ class _CategoryTimeSliderState extends State<CategoryTimeSlider> {
               setState(() {
                 _selectedIndex = index;
               });
+              Provider.of<CourseListProvider>(context, listen: false)
+                  .setFilter(filters[index]);
             },
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 3),

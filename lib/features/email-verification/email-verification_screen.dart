@@ -139,7 +139,7 @@ class emailVerificationPages extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(context, '/resend-verification',(route) => false);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => resendVerifPages()));
                   },
                   child: Text(
                     'Kirim',

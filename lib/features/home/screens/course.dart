@@ -3,6 +3,8 @@ import 'package:hology_fe/features/home/widgets/category_time_slider.dart';
 import 'package:hology_fe/features/home/widgets/course_card.dart';
 import 'package:hology_fe/features/home/widgets/header.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:provider/provider.dart';
+import 'package:hology_fe/providers/HomeProvider/course_list_provider.dart';
 
 class Course extends StatefulWidget {
   const Course({super.key});
@@ -42,6 +44,9 @@ class _CourseState extends State<Course> {
                           ),
                           child: TextField(
                             textAlignVertical: TextAlignVertical.center,
+                            onChanged: (value) {
+                              Provider.of<CourseListProvider>(context, listen: false).setSearchQuery(value);
+                            },
                             decoration: InputDecoration(
                               hintText: "Cari kursus",
                               hintStyle: TextStyle(

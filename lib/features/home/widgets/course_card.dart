@@ -3,38 +3,22 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hology_fe/features/course/screens/course_detail.dart';
 import 'package:hology_fe/shared/theme.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:hology_fe/providers/HomeProvider/course_list_provider.dart';
 
-class CourseCard extends StatefulWidget {
+class CourseCard extends StatelessWidget {
   const CourseCard({super.key});
 
   @override
-  State<CourseCard> createState() => _CourseCardState();
-}
-
-class _CourseCardState extends State<CourseCard> {
-  final List<Map<String, String>> courses = [
-    {
-      "title": "React JS",
-      "image": "assets/images/react.png",
-      "videos": "10 Video",
-      "rating": "4.2",
-    },
-    {
-      "title": "React JS",
-      "image": "assets/images/react.png",
-      "videos": "10 Video",
-      "rating": "4.2",
-    },
-    {
-      "title": "React JS",
-      "image": "assets/images/react.png",
-      "videos": "10 Video",
-      "rating": "4.2",
-    },
-  ];
-
-  @override
   Widget build(BuildContext context) {
+    final courseProvider = Provider.of<CourseListProvider>(context);
+    final courses = courseProvider.courses;
+    if (courseProvider.isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+    if (courses.isEmpty) {
+      return Center(child: Text('Tidak ada kursus ditemukan'));
+    }
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -68,24 +52,15 @@ class _CourseCardState extends State<CourseCard> {
               children: [
                 Row(
                   children: [
-                    Image.asset(course["image"]!, height: 120, width: 120),
+                    Image.network(course.image, height: 120, width: 120, fit: BoxFit.cover),
                     SizedBox(width: 15),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          course["title"]!,
+                          course.title,
                           style: TextStyle(fontSize: 14, fontWeight: semibold),
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          course["videos"]!,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: lightGrey,
-                            fontWeight: semibold,
-                          ),
                         ),
                         SizedBox(height: 2),
                         Row(
@@ -96,7 +71,7 @@ class _CourseCardState extends State<CourseCard> {
                               width: 15,
                             ),
                             SizedBox(width: 3),
-                            Text(course["rating"]!),
+                            Text('${course.rating}', style: TextStyle(fontSize: 12)),
                           ],
                         ),
                       ],

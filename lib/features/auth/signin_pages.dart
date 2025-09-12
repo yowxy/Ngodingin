@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hology_fe/features/auth/signup_pages.dart';
+import 'package:hology_fe/features/forgot-password/forgot-password_screen.dart';
 import 'package:hology_fe/features/home/screens/homepage.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/features/widgets/form.dart';
@@ -130,7 +132,7 @@ class _SigninPagesState extends State<SigninPages> {
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(context, '/forgot-password', (route) => false);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordPages()));
                   },
                   child: Text(
                     'Lupa Password',
@@ -194,7 +196,7 @@ class _SigninPagesState extends State<SigninPages> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(context, '/sign-up',(route) => false);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SignupPages()));
                   },
                   child: Text(
                     'Daftar',

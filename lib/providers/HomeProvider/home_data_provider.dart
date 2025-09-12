@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:hology_fe/providers/Database/db_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:hology_fe/constants/url.dart';
@@ -13,7 +14,6 @@ class HomeDataProvider extends ChangeNotifier {
   bool _isLoading = false;
   String _selectedCategory = '';
   String _searchQuery = '';
-  String? _token;
 
   List<Map<String, dynamic>> get recommendedCourses => _recommendedCourses;
   List<EnrolledCourse> get enrolledCourses => _enrolledCourses;
@@ -23,50 +23,73 @@ class HomeDataProvider extends ChangeNotifier {
   String get selectedCategory => _selectedCategory;
   String get searchQuery => _searchQuery;
 
-  void setCategory(String category) {
-    _selectedCategory = category;
-    fetchHomeData();
+  void setCategory(String categoryId) {
+    _selectedCategory = categoryId;
+    fetchCoursesByCategory(categoryId);
     notifyListeners();
   }
 
   void setSearchQuery(String query) {
     _searchQuery = query;
-    fetchHomeData();
+    fetchSearchData(query);
     notifyListeners();
   }
 
-  void setToken(String token) {
-    _token = token;
+  Future<void> fetchSearchData(String query) async {
+    _isLoading = true;
+    notifyListeners();
+    String url = "$requestBaseUrl/home/search?q=$query";
+    final token = await DatabaseProvider().getToken();
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      if (response.statusCode == 200) {
+        final res = json.decode(response.body);
+        final data = res['data'];
+        final List<dynamic> recommendedList = data['recommended_courses'] ?? [];
+        _recommendedCourses = recommendedList.map((e) => Map<String, dynamic>.from(e)).toList();
+        final List<dynamic> enrolledList = data['enrolled_courses'] ?? [];
+        _enrolledCourses = enrolledList.map((e) => EnrolledCourse.fromJson(e)).toList();
+        final List<dynamic> allList = data['all_courses'] ?? [];
+        _allCourses = allList.map((e) => Map<String, dynamic>.from(e)).toList();
+        print(_allCourses);
+      } else {
+        _recommendedCourses = [];
+        _enrolledCourses = [];
+        _allCourses = [];
+      }
+    } catch (e) {
+      _recommendedCourses = [];
+      _enrolledCourses = [];
+      _allCourses = [];
+    }
+    _isLoading = false;
     notifyListeners();
   }
 
   Future<void> fetchHomeData() async {
     _isLoading = true;
     notifyListeners();
-    String url = "$requestBaseUrl/home?";
-    if (_selectedCategory.isNotEmpty && _selectedCategory != "Semua") {
-      url += "category_id=$_selectedCategory&";
-    }
-    if (_searchQuery.isNotEmpty) {
-      url += "search=$_searchQuery&";
-    }
+    String url = "$requestBaseUrl/home";
+    final token = await DatabaseProvider().getToken();
     try {
       final response = await http.get(
         Uri.parse(url),
         headers: {
-          'Authorization': 'Bearer ${_token ?? ''}',
+          'Authorization': 'Bearer $token',
         },
       );
       if (response.statusCode == 200) {
         final res = json.decode(response.body);
         final data = res['data'];
-        // Recommended Courses
         final List<dynamic> recommendedList = data['recommended_courses'] ?? [];
         _recommendedCourses = recommendedList.map((e) => Map<String, dynamic>.from(e)).toList();
-        // Enrolled Courses
         final List<dynamic> enrolledList = data['enrolled_courses'] ?? [];
         _enrolledCourses = enrolledList.map((e) => EnrolledCourse.fromJson(e)).toList();
-        // All Courses
         final List<dynamic> allList = data['all_courses'] ?? [];
         _allCourses = allList.map((e) => Map<String, dynamic>.from(e)).toList();
       } else {
@@ -85,11 +108,12 @@ class HomeDataProvider extends ChangeNotifier {
 
   Future<void> fetchCategories() async {
     String url = "$requestBaseUrl/categories";
+    final token = await DatabaseProvider().getToken();
     try {
       final response = await http.get(
         Uri.parse(url),
         headers: {
-          'Authorization': 'Bearer ${_token ?? ''}',
+          'Authorization': 'Bearer $token',
         },
       );
       if (response.statusCode == 200) {
@@ -109,11 +133,12 @@ class HomeDataProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     String url = "$requestBaseUrl/home/category/$categoryId";
+    final token = await DatabaseProvider().getToken();
     try {
       final response = await http.get(
         Uri.parse(url),
         headers: {
-          'Authorization': 'Bearer ${_token ?? ''}',
+          'Authorization': 'Bearer $token',
         },
       );
       if (response.statusCode == 200) {
