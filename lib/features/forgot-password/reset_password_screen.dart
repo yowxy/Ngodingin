@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hology_fe/features/auth/signin_pages.dart';
-import 'package:hology_fe/features/chose_prefrences/chose.prefrences.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/features/widgets/form.dart';
 import 'package:hology_fe/shared/theme.dart';
@@ -26,17 +24,12 @@ class _ResetPasswordPagesState extends State<ResetPasswordPages> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-          },
-        ),
+        automaticallyImplyLeading: false,
         title: Text(
           'Reset Kata Sandi',
           style: blackTextStyle.copyWith(
             fontWeight: semibold,
-            fontSize: 21,
+            fontSize: 18,
           ),
         ),
         centerTitle: true,
@@ -77,7 +70,7 @@ class _ResetPasswordPagesState extends State<ResetPasswordPages> {
               height: 47,
             ),
         
-            const SizedBox(height: 10),
+            const SizedBox(height: 15),
             Text(
               'Token',
               style: blackTextStyle.copyWith(
@@ -85,7 +78,7 @@ class _ResetPasswordPagesState extends State<ResetPasswordPages> {
                 fontSize: 14,
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 10),
             CustomTextForm(
               controller: tokenController,
               hintText: 'Masukan token dari email',
@@ -94,7 +87,7 @@ class _ResetPasswordPagesState extends State<ResetPasswordPages> {
               height: 47,
             ),
         
-            const SizedBox(height: 10),
+            const SizedBox(height: 15),
             Text(
               'Kata Sandi',
               style: blackTextStyle.copyWith(
@@ -102,7 +95,7 @@ class _ResetPasswordPagesState extends State<ResetPasswordPages> {
                 fontSize: 14,
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 10),
             CustomTextForm(
               controller: passwordController,
               hintText: 'Masukan Kata sandi',

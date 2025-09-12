@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:hology_fe/features/auth/signin_pages.dart';
 import 'package:hology_fe/features/auth/signup_pages.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/shared/theme.dart';
@@ -18,72 +19,71 @@ class _SplashPageState extends State<SplashPage> {
       backgroundColor: whiteBackgroundColor,
       body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 447,
-                height: 447,
-                child: Image.asset('assets/images/splash_image_bg.png'),
-              ),
-        
-              Text(
-                'Belajar kapan saja, di mana saja, dengan aplikasi edukasi yang siap mendukung kesuksesanmu.',
-                style: blackTextStyle.copyWith(
-                  fontSize: 20,
-                  fontWeight: medium, // bisa ganti reguler / medium / bold
-                ),
-                textAlign: TextAlign.center,
-              ),
-        
-              const SizedBox(
-                height: 30,
-              ),
-        
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/images/splash_image_bg.png'),
             
-         CustomButton(
-          title: 'Register',
-          width: 350,
-          height: 55,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SignupPages (), // ganti dengan halaman tujuanmu
-              ),
-            );
-          },
-        ),
-
-        
-            const SizedBox(
-              height: 20,
-            ),
-        
-            RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                text: 'Sudah punya akun? ',
-                style: blackTextStyle.copyWith(
-                  fontSize: 12,
-                  fontWeight: medium,
-                ),
-                children: [
-                  TextSpan(
-                    text: 'Masuk',
-                    style: blackTextStyle.copyWith(
-                      fontSize: 12,
-                      fontWeight: bold, // hanya "Masuk" yang bold
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        Navigator.pushNamed(context, '/sign-in'); // ganti ke route login
-                      },
+                Text(
+                  'Belajar kapan saja, di mana saja, dengan aplikasi edukasi yang siap mendukung kesuksesanmu.',
+                  style: blackTextStyle.copyWith(
+                    fontSize: 18,
+                    fontWeight: medium,
                   ),
-                ],
-              ),
+                  textAlign: TextAlign.center,
+                ),
+            
+                const SizedBox(height: 20),
+            
+                CustomButton(
+                  title: 'Register',
+                  width: 400,
+                  height: 55,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignupPages(),
+                      ),
+                    );
+                  },
+                ),
+            
+                const SizedBox(height: 20),
+            
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    text: 'Sudah punya akun? ',
+                    style: blackTextStyle.copyWith(
+                      fontSize: 14,
+                      fontWeight: medium,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: 'Masuk',
+                        style: blackTextStyle.copyWith(
+                          fontSize: 14,
+                          fontWeight: bold,
+                          color: greenColor,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SigninPages(),
+                              ),
+                            );
+                          },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            ],
           ),
         ),
       ),

@@ -1,16 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hology_fe/constants/url.dart';
 import 'package:hology_fe/features/chose_prefrences/chose.prefrences.dart';
-import 'package:hology_fe/features/forgot-password/reset-password_screen.dart';
+import 'package:hology_fe/features/forgot-password/reset_password_screen.dart';
+import 'package:hology_fe/providers/Database/db_provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:hology_fe/providers/database/db_provider.dart';
 import 'package:hology_fe/features/auth/signin_pages.dart';
 import 'package:hology_fe/features/home/screens/homepage.dart';
-import 'package:hology_fe/features/email-verification/email-verification_screen.dart';
+import 'package:hology_fe/features/email-verification/email_verification_screen.dart';
 import 'package:hology_fe/utils/snack_message.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
@@ -20,10 +18,17 @@ class AuthenticationProvider extends ChangeNotifier {
   ///Setter
   bool _isLoading = false;
   String _resMessage = '';
+  String _registeredEmail = '';
 
   //Getter
   bool get isLoading => _isLoading;
   String get resMessage => _resMessage;
+  String get registeredEmail => _registeredEmail;
+
+  void setRegisteredEmail(String email) {
+    _registeredEmail = email;
+    notifyListeners();
+  }
 
   void registerUser({
     required String email,
@@ -52,17 +57,17 @@ class AuthenticationProvider extends ChangeNotifier {
         _isLoading = false;
         _resMessage = res['message'] ?? "Akun berhasil dibuat! Silahkan cek email untuk verifikasi.";
         notifyListeners();
-        // Tampilkan pesan sebelum pindah halaman
         successMessage(
           message: _resMessage,
           context: context!,
         );
         await Future.delayed(const Duration(milliseconds: 1200));
         Navigator.pushAndRemoveUntil(
-          context!,
-          MaterialPageRoute(builder: (context) => emailVerificationPages()),
+          context,
+          MaterialPageRoute(builder: (context) => EmailVerificationPages()),
           (route) => false,
         );
+        setRegisteredEmail(email);
       } else {
         final res = json.decode(req.body);
 
@@ -154,7 +159,6 @@ class AuthenticationProvider extends ChangeNotifier {
   }
 
   void emailVerification({
-    required String email,
     required String token,
     BuildContext? context,
   }) async {
@@ -163,7 +167,7 @@ class AuthenticationProvider extends ChangeNotifier {
 
     String url = "$requestBaseUrl/auth/verify-email";
 
-    final body = {"email": email, "token": token};
+    final body = {"email": registeredEmail, "token": token};
     print(body);
 
     try {
@@ -249,7 +253,7 @@ class AuthenticationProvider extends ChangeNotifier {
         await Future.delayed(const Duration(milliseconds: 1200));
         Navigator.pushAndRemoveUntil(
           context!,
-          MaterialPageRoute(builder: (context) => emailVerificationPages()),
+          MaterialPageRoute(builder: (context) => EmailVerificationPages()),
           (route) => false,
         );
       } else {
@@ -462,7 +466,6 @@ class AuthenticationProvider extends ChangeNotifier {
 
   void clear() {
     _resMessage = "";
-    // _isLoading = false;
     notifyListeners();
   }
 }

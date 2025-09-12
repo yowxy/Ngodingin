@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hology_fe/features/home/screens/homepage.dart';
+import 'package:hology_fe/features/auth/signup_pages.dart';
+import 'package:hology_fe/features/forgot-password/forgot_password_screen.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/features/widgets/form.dart';
 import 'package:hology_fe/shared/theme.dart';
@@ -18,25 +19,17 @@ class _SigninPagesState extends State<SigninPages> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  bool _isObscure = true; // untuk toggle password
-  bool _rememberMe = false; // untuk checkbox "ingat saya"
+  bool _isObscure = true;
+  bool _rememberMe = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-          },
-        ),
+        automaticallyImplyLeading: false,
         title: Text(
           'Masuk',
-          style: blackTextStyle.copyWith(
-            fontWeight: semibold,
-            fontSize: 21,
-          ),
+          style: blackTextStyle.copyWith(fontWeight: semibold, fontSize: 21),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -46,7 +39,6 @@ class _SigninPagesState extends State<SigninPages> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           children: [
-            // Gambar di tengah
             Container(
               width: 245,
               height: 234,
@@ -57,8 +49,7 @@ class _SigninPagesState extends State<SigninPages> {
                 ),
               ),
             ),
-        
-            // Label email
+
             Text(
               'Email',
               style: blackTextStyle.copyWith(
@@ -67,8 +58,7 @@ class _SigninPagesState extends State<SigninPages> {
               ),
             ),
             const SizedBox(height: 10),
-        
-            // Input email
+
             CustomTextForm(
               controller: emailController,
               hintText: 'Masukkan Email anda',
@@ -77,8 +67,7 @@ class _SigninPagesState extends State<SigninPages> {
               height: 47,
             ),
             const SizedBox(height: 22),
-        
-            // Label password
+
             Text(
               'Kata sandi',
               style: blackTextStyle.copyWith(
@@ -87,8 +76,7 @@ class _SigninPagesState extends State<SigninPages> {
               ),
             ),
             const SizedBox(height: 10),
-        
-            // Input password dengan eye icon
+
             CustomTextForm(
               controller: passwordController,
               hintText: 'Masukkan kata sandi anda',
@@ -106,9 +94,9 @@ class _SigninPagesState extends State<SigninPages> {
                 },
               ),
             ),
-        
-            const SizedBox(height: 10),
-        
+
+            const SizedBox(height: 5),
+
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -130,7 +118,12 @@ class _SigninPagesState extends State<SigninPages> {
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(context, '/forgot-password', (route) => false);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ForgotPasswordPages(),
+                      ),
+                    );
                   },
                   child: Text(
                     'Lupa Password',
@@ -142,30 +135,37 @@ class _SigninPagesState extends State<SigninPages> {
                 ),
               ],
             ),
-        
+
             const SizedBox(height: 10),
-        
+
             CustomButton(
               title: 'Masuk',
               width: 350,
               height: 55,
               onPressed: () {
-                if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+                if (emailController.text.isEmpty ||
+                    passwordController.text.isEmpty) {
                   errorMessage(
                     message: 'Email dan password tidak boleh kosong!',
                     context: context,
                   );
                   return;
                 }
-                Provider.of<AuthenticationProvider>(context, listen: false).loginUser(
+                Provider.of<AuthenticationProvider>(
+                  context,
+                  listen: false,
+                ).loginUser(
                   email: emailController.text.trim(),
                   password: passwordController.text.trim(),
                   context: context,
                 );
-                final provider = Provider.of<AuthenticationProvider>(context, listen: false);
-                // Tampilkan pesan sesuai status dari response
+                final provider = Provider.of<AuthenticationProvider>(
+                  context,
+                  listen: false,
+                );
                 if (provider.resMessage.isNotEmpty) {
-                  if (provider.resMessage.toLowerCase().contains('success') || provider.resMessage.toLowerCase().contains('berhasil')) {
+                  if (provider.resMessage.toLowerCase().contains('success') ||
+                      provider.resMessage.toLowerCase().contains('berhasil')) {
                     successMessage(
                       message: provider.resMessage,
                       context: context,
@@ -179,9 +179,9 @@ class _SigninPagesState extends State<SigninPages> {
                 }
               },
             ),
-        
-            const SizedBox(height: 10),
-        
+
+            const SizedBox(height: 15),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -194,11 +194,15 @@ class _SigninPagesState extends State<SigninPages> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(context, '/sign-up',(route) => false);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignupPages()),
+                    );
                   },
                   child: Text(
                     'Daftar',
-                    style: blackTextStyle.copyWith(
+                    style: TextStyle(
+                      color: greenColor,
                       fontWeight: bold,
                       fontSize: 14,
                     ),
