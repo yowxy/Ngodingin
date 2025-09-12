@@ -6,7 +6,7 @@ class CustomTextForm extends StatelessWidget {
   final bool obscureText;
   final double width;
   final double height;
-  final Widget? suffixIcon; // <-- tambahin ini
+  final Widget? suffixIcon;
 
   const CustomTextForm({
     super.key,
@@ -15,7 +15,7 @@ class CustomTextForm extends StatelessWidget {
     required this.obscureText,
     required this.width,
     required this.height,
-    this.suffixIcon, // <-- tambahin juga di constructor
+    this.suffixIcon,
   });
 
   @override
@@ -35,7 +35,7 @@ class CustomTextForm extends StatelessWidget {
             horizontal: 16,
             vertical: 12,
           ),
-          suffixIcon: suffixIcon, // <-- pasang di sini
+          suffixIcon: suffixIcon,
         ),
       ),
     );

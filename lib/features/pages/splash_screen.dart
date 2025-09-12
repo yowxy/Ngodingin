@@ -19,6 +19,8 @@ class _SplashPageState extends State<SplashPage> {
       backgroundColor: whiteBackgroundColor,
       body: SafeArea(
         child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -93,6 +95,7 @@ class _SplashPageState extends State<SplashPage> {
           ),
         ),
       ),
+    )
     );
   }
 }

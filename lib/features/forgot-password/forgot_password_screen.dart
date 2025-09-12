@@ -15,17 +15,12 @@ class ForgotPasswordPages extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-          },
-        ),
+        automaticallyImplyLeading: false,
         title: Text(
           'Lupa Kata Sandi',
           style: blackTextStyle.copyWith(
             fontWeight: semibold,
-            fontSize: 21,
+            fontSize: 18,
           ),
         ),
         centerTitle: true,
@@ -57,7 +52,7 @@ class ForgotPasswordPages extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 12,
             ),
             CustomTextForm(
                 controller: emailController,
