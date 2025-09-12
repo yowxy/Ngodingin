@@ -24,7 +24,6 @@ class ForgotPasswordPages extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: SafeArea(

@@ -86,10 +86,9 @@ class EmailVerificationPages extends StatelessWidget {
               width: 350,
               height: 55,
               onPressed: () {
-                if (emailController.text.isEmpty ||
-                    tokenController.text.isEmpty) {
+                if (tokenController.text.isEmpty) {
                   errorMessage(
-                    message: 'Email dan token tidak boleh kosong!',
+                    message: 'Token tidak boleh kosong!',
                     context: context,
                   );
                   return;

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hology_fe/features/home/widgets/category_course_slider.dart';
 import 'package:hology_fe/features/home/widgets/header.dart';
 import 'package:hology_fe/features/home/widgets/my_course_card.dart';
-import 'package:hology_fe/features/home/widgets/my_course_list.dart';
 import 'package:hology_fe/features/home/widgets/recommended_course_card.dart';
 import 'package:hology_fe/shared/theme.dart';
 import 'package:provider/provider.dart';

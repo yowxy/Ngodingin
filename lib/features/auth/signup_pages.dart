@@ -35,7 +35,6 @@ class _SignupPagesState extends State<SignupPages> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
         elevation: 0,
       ),
 

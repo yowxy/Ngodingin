@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hology_fe/features/auth/signup_pages.dart';
 import 'package:hology_fe/features/forgot-password/forgot_password_screen.dart';
-import 'package:hology_fe/features/home/screens/homepage.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/features/widgets/form.dart';
 import 'package:hology_fe/shared/theme.dart';
@@ -21,7 +20,6 @@ class _SigninPagesState extends State<SigninPages> {
   final TextEditingController passwordController = TextEditingController();
 
   bool _isObscure = true;
-  bool _rememberMe = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +31,6 @@ class _SigninPagesState extends State<SigninPages> {
           style: blackTextStyle.copyWith(fontWeight: semibold, fontSize: 21),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: SafeArea(
@@ -96,48 +93,30 @@ class _SigninPagesState extends State<SigninPages> {
               ),
             ),
 
-            const SizedBox(height: 5),
+            const SizedBox(height: 10),
 
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Checkbox(
-                  value: _rememberMe,
-                  onChanged: (value) {
-                    setState(() {
-                      _rememberMe = value ?? false;
-                    });
-                  },
-                ),
-                Text(
-                  "Ingat saya",
-                  style: blackTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: medium,
-                  ),
-                ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ForgotPasswordPages(),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'Lupa Password',
-                    style: greenTextStyle.copyWith(
-                      fontWeight: semibold,
-                      fontSize: 14,
+            Container(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ForgotPasswordPages(),
                     ),
+                  );
+                },
+                child: Text(
+                  'Lupa Kata Sandi?',
+                  style: greenTextStyle.copyWith(
+                    fontWeight: semibold,
+                    fontSize: 14,
                   ),
                 ),
-              ],
+              ),
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 30),
 
             CustomButton(
               title: 'Masuk',

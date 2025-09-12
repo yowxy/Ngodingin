@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:hology_fe/models/enrolled_course_model.dart';
 import 'package:hology_fe/providers/HomeProvider/home_data_provider.dart';
 import 'package:hology_fe/shared/theme.dart';
 
@@ -61,6 +60,7 @@ class MyCourseList extends StatelessWidget {
                               fontSize: 14,
                               fontWeight: semibold,
                             ),
+                            maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),

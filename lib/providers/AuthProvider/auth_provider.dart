@@ -195,7 +195,7 @@ class AuthenticationProvider extends ChangeNotifier {
         await Future.delayed(const Duration(milliseconds: 1200));
         Navigator.pushAndRemoveUntil(
           context!,
-          MaterialPageRoute(builder: (context) => const choosePrefrencesPages()),
+          MaterialPageRoute(builder: (context) => const ChoosePrefrencesPages()),
           (route) => false,
         );
       } else {

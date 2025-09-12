@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hology_fe/features/pages/splash_screen.dart';
+import 'package:hology_fe/features/auth/signin_pages.dart';
+import 'package:hology_fe/features/auth/signup_pages.dart';
+import 'package:hology_fe/features/splash/splash_screen.dart';
+import 'package:hology_fe/providers/Database/db_provider.dart';
 import 'package:hology_fe/providers/ProfileProvider/profile_course_provider.dart';
 import 'package:hology_fe/providers/ProfileProvider/profile_provider.dart';
 import 'package:provider/provider.dart';
@@ -9,11 +12,11 @@ import 'package:hology_fe/providers/HomeProvider/home_provider.dart';
 import 'package:hology_fe/providers/HomeProvider/home_data_provider.dart';
 import 'package:hology_fe/providers/HomeProvider/course_list_provider.dart';
 
-
 void main() {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => DatabaseProvider()),
         ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => HomeDataProvider()),
@@ -38,6 +41,7 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.poppins().fontFamily,
       ),
       debugShowCheckedModeBanner: false,
+      // home: const SplashPage(),
       home: const SplashPage(),
     );
   }

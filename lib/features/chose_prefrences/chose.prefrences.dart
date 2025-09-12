@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hology_fe/features/chose_prefrences/widget/CustomButtonRefrences.dart';
 import 'package:provider/provider.dart';
 import 'package:hology_fe/providers/CategoryPreferencesProvider/category_preferences_provider.dart';
 import 'package:hology_fe/features/home/screens/homepage.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/shared/theme.dart';
-import 'dart:convert';
-
-class choosePrefrencesPages extends StatelessWidget {
-  const choosePrefrencesPages({super.key});
+class ChoosePrefrencesPages extends StatelessWidget {
+  const ChoosePrefrencesPages({super.key});
 
   @override
   Widget build(BuildContext context) {

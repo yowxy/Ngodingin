@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hology_fe/shared/theme.dart';
-
 class ButtonQuiz extends StatefulWidget {
   final String text;
   final double width;

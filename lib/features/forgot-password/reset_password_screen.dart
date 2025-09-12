@@ -33,7 +33,6 @@ class _ResetPasswordPagesState extends State<ResetPasswordPages> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: SafeArea(
