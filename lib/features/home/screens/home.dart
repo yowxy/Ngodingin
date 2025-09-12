@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hology_fe/features/home/widgets/category_course_slider.dart';
 import 'package:hology_fe/features/home/widgets/header.dart';
+import 'package:hology_fe/features/home/widgets/my_course_card.dart';
 import 'package:hology_fe/features/home/widgets/my_course_list.dart';
 import 'package:hology_fe/features/home/widgets/recommended_course_card.dart';
 import 'package:hology_fe/shared/theme.dart';
@@ -28,6 +29,7 @@ class _HomeState extends State<Home> {
                 color: whitegreenColor,
                 width: double.infinity,
                 child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: 20,
@@ -88,7 +90,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         SizedBox(height: 10),
-                        MyCourseList(),
+                        MyCourseCard(),
                         SizedBox(height: 20), // Tambahan agar tidak overflow di bawah
                       ],
                     ),

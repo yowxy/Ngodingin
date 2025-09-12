@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hology_fe/features/chose_prefrences/chose.prefrences.dart';
-import 'package:hology_fe/features/email-verification/resend-verification_screen.dart';
+import 'package:hology_fe/features/email-verification/resend_verification_screen.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/features/widgets/form.dart';
 import 'package:hology_fe/shared/theme.dart';
@@ -104,7 +104,6 @@ class emailVerificationPages extends StatelessWidget {
                 return;
               }
               Provider.of<AuthenticationProvider>(context, listen: false).emailVerification(
-                email: emailController.text.trim(),
                 token: tokenController.text.trim(),
                 context: context,
               );
@@ -139,7 +138,7 @@ class emailVerificationPages extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => resendVerifPages()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ResendVerifPages()));
                   },
                   child: Text(
                     'Kirim',

@@ -11,21 +11,24 @@ class MyCourseList extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeDataProvider = Provider.of<HomeDataProvider>(context);
     final courses = homeDataProvider.enrolledCourses;
+
     if (homeDataProvider.isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
     if (courses.isEmpty) {
-      return Center(child: Text('Belum ada kursus yang diikuti'));
+      return const Center(child: Text('Belum ada kursus yang diikuti'));
     }
+
     return ListView.builder(
-      physics: const BouncingScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(), // ← TAMBAHKAN INI
+      shrinkWrap: true, // ← TAMBAHKAN INI
       itemCount: courses.length,
       itemBuilder: (context, index) {
         final course = courses[index];
         return Container(
           height: 110,
-          padding: EdgeInsets.all(20),
-          margin: EdgeInsets.only(bottom: 10, top: 5, left: 5, right: 5),
+          padding: const EdgeInsets.all(20),
+          margin: const EdgeInsets.only(bottom: 10, top: 5, left: 5, right: 5),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
@@ -33,7 +36,7 @@ class MyCourseList extends StatelessWidget {
               BoxShadow(
                 color: Colors.black26,
                 blurRadius: 5,
-                offset: Offset(0, 0),
+                offset: const Offset(0, 0),
               ),
             ],
           ),
@@ -54,7 +57,10 @@ class MyCourseList extends StatelessWidget {
                         Flexible(
                           child: Text(
                             course.title,
-                            style: TextStyle(fontSize: 14, fontWeight: semibold),
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: semibold,
+                            ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),

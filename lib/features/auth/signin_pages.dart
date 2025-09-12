@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hology_fe/features/auth/signup_pages.dart';
-import 'package:hology_fe/features/forgot-password/forgot-password_screen.dart';
+import 'package:hology_fe/features/forgot-password/forgot_password_screen.dart';
 import 'package:hology_fe/features/home/screens/homepage.dart';
 import 'package:hology_fe/features/widgets/button.dart';
 import 'package:hology_fe/features/widgets/form.dart';
