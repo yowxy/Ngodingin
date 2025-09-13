@@ -2,28 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:hology_fe/shared/theme.dart';
 
 class LeaderboardList extends StatelessWidget {
-  const LeaderboardList({super.key});
+  final List entries;
+  final bool isLoading;
+
+  const LeaderboardList({super.key, required this.entries, required this.isLoading});
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, String>> players = [
-      {"name": "Areal", "point": "1234"},
-      {"name": "Iklil", "point": "123"},
-      {"name": "Mifta", "point": "12"},
-      {"name": "Areal", "point": "1234"},
-      {"name": "Iklil", "point": "123"},
-      {"name": "Mifta", "point": "12"},
-      {"name": "Areal", "point": "1234"},
-      {"name": "Iklil", "point": "123"},
-      {"name": "Mifta", "point": "12"},
-    ];
-
+    if (isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+    if (entries.isEmpty) {
+      return Center(child: Text('Belum ada data leaderboard'));
+    }
     return ListView.builder(
-      itemCount: players.length,
+      itemCount: entries.length,
       itemBuilder: (context, index) {
-        final player = players[index];
-        final rank = index + 4;
-
+        final entry = entries[index];
+        final rank = index + 1;
+        final name = entry.user?.name ?? '-';
+        final point = entry.totalScore;
         return Container(
           width: double.infinity,
           height: 70,
@@ -63,12 +61,7 @@ class LeaderboardList extends StatelessWidget {
                   ],
                 ),
                 child: ClipOval(
-                  child: Image.asset(
-                    "assets/images/profile.png",
-                    height: 40,
-                    width: 40,
-                    fit: BoxFit.cover,
-                  ),
+                  child: Image.asset("assets/images/profile.png", height: 40, width: 40, fit: BoxFit.cover),
                 ),
               ),
               SizedBox(width: 10),
@@ -76,8 +69,16 @@ class LeaderboardList extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(player["name"]!, style: TextStyle(color: whiteColor, fontWeight: bold, fontSize: 16)),
-                  Text("${player["point"]!} Point", style: TextStyle(color: whiteColor, fontSize: 12))
+                  SizedBox(
+                    width: 120,
+                    child: Text(
+                      name,
+                      style: TextStyle(color: whiteColor, fontWeight: bold, fontSize: 16),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ),
+                  Text("$point Point", style: TextStyle(color: whiteColor, fontSize: 12))
                 ],
               )
             ],

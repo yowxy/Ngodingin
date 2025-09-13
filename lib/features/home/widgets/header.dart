@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hology_fe/shared/theme.dart';
 import 'package:hology_fe/providers/HomeProvider/home_provider.dart';
+import 'package:hology_fe/providers/AuthProvider/auth_provider.dart';
 
 class Header extends StatefulWidget {
   const Header({super.key});
@@ -33,7 +34,6 @@ class _HeaderState extends State<Header> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const Icon(Icons.logout, color: Colors.red, size: 18),
-
                 const SizedBox(width: 10),
                 Text(
                   "Logout",
@@ -51,7 +51,9 @@ class _HeaderState extends State<Header> {
     );
 
     if (result == 'logout') {
-      print("Logout tapped");
+      // Trigger API logout
+      final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+      authProvider.logout(token: '', context: context);
     }
   }
 

@@ -60,9 +60,9 @@ class RecommendedCourseCard extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: course['image'] != null
+                    child: course['banner_url'] != null
                         ? Image.network(
-                            course['image'],
+                            course['banner_url'],
                             height: 120,
                             width: double.infinity,
                             fit: BoxFit.cover,
@@ -83,7 +83,7 @@ class RecommendedCourseCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        course['desc'] ?? '',
+                        course['short_description'] ?? '',
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                       SizedBox(height: 15),
@@ -99,7 +99,7 @@ class RecommendedCourseCard extends StatelessWidget {
                               ),
                               SizedBox(width: 4),
                               Text(
-                                course['videos']?.toString() ?? '',
+                                '${course['total_video']} Video',
                                 style: TextStyle(fontSize: 12),
                               ),
                             ],
@@ -114,7 +114,7 @@ class RecommendedCourseCard extends StatelessWidget {
                               ),
                               SizedBox(width: 4),
                               Text(
-                                course['duration']?.toString() ?? '',
+                                '${course['duration_hours']} Jam',
                                 style: TextStyle(fontSize: 12),
                               ),
                             ],
