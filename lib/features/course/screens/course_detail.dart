@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hology_fe/features/course/widgets/list_chapter.dart';
 import 'package:hology_fe/features/course/widgets/rating_bottom_sheet.dart';
+import 'package:hology_fe/providers/CourseDetailProvider/course_detail_provider.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:provider/provider.dart';
 
 class CourseDetail extends StatefulWidget {
-  const CourseDetail({super.key});
+  final String courseId;
+  const CourseDetail({super.key, required this.courseId});
 
   @override
   State<CourseDetail> createState() => _CourseDetailState();
@@ -20,22 +23,71 @@ class _CourseDetailState extends State<CourseDetail> {
   }
 
   void _showRatingBottomSheet() {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (context) => const RatingBottomSheet(),
-  );
-}
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => const RatingBottomSheet(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final courseDetailProvider = Provider.of<CourseDetailProvider>(context);
+    final courseDetail = courseDetailProvider.courseDetail;
+
+    if (courseDetailProvider.isLoading) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Loading...",
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: semibold,
+              fontSize: 18,
+            ),
+          ),
+          centerTitle: true,
+        ),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (courseDetailProvider.errorMessage != null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Error",
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: semibold,
+              fontSize: 18,
+            ),
+          ),
+          centerTitle: true,
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(courseDetailProvider.errorMessage!),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: courseDetailProvider.fetchCourseDetail,
+                child: Text('Coba Lagi'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            "React JS",
+            courseDetail?.course.title ?? "",
             style: TextStyle(
               color: Colors.black,
               fontWeight: semibold,
@@ -73,7 +125,6 @@ class _CourseDetailState extends State<CourseDetail> {
                               ),
                             ),
                           ),
-
                           Positioned(
                             bottom: 0,
                             left: 0,
@@ -97,7 +148,6 @@ class _CourseDetailState extends State<CourseDetail> {
                                     size: 32,
                                   ),
                                   const SizedBox(width: 8),
-
                                   Text(
                                     "${_formatDuration(const Duration(seconds: 1))} / ${_formatDuration(const Duration(minutes: 10))}",
                                     style: const TextStyle(
@@ -106,9 +156,7 @@ class _CourseDetailState extends State<CourseDetail> {
                                       color: Colors.black87,
                                     ),
                                   ),
-
                                   const Spacer(),
-
                                   const Icon(
                                     Icons.volume_up,
                                     color: Colors.green,
@@ -125,9 +173,7 @@ class _CourseDetailState extends State<CourseDetail> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 25),
-
                     Container(
                       decoration: BoxDecoration(
                         color: whiteColor,
@@ -147,16 +193,13 @@ class _CourseDetailState extends State<CourseDetail> {
                         ],
                       ),
                     ),
-
                     SizedBox(height: 25),
-
                     Expanded(
                       child: TabBarView(
                         children: [
                           SingleChildScrollView(
-                            child: ListChapter()
+                            child: ListChapter(courseId: widget.courseId)
                           ),
-
                           SingleChildScrollView(
                             child: Column(
                               children: [
@@ -171,13 +214,11 @@ class _CourseDetailState extends State<CourseDetail> {
                                     horizontal: 20,
                                   ),
                                   child: Text(
-                                    "React JS adalah library JavaScript populer yang dikembangkan oleh Facebook untuk membangun antarmuka pengguna (user interface) yang interaktif dan dinamis pada aplikasi web maupun mobile. Inti dari React adalah konsep komponen, di mana UI dibagi menjadi bagian-bagian kecil yang dapat digunakan ulang dan memiliki logika serta tampilan sendiri, membuat aplikasi menjadi modular dan mudah dipelihara. Selengkapnya...",
+                                    courseDetail?.course.description ?? "React JS adalah library JavaScript...", // Gunakan data provider
                                     style: TextStyle(fontSize: 14),
                                   ),
                                 ),
-
                                 SizedBox(height: 15),
-
                                 Container(
                                   width: double.infinity,
                                   decoration: BoxDecoration(
@@ -200,7 +241,7 @@ class _CourseDetailState extends State<CourseDetail> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text("Total Video", style: TextStyle(fontWeight: semibold, fontSize: 15)),
-                                          Text("10 Video", style: TextStyle(fontSize: 13, color: lightGrey)),
+                                          Text("${courseDetail?.course.totalStudents.toString() ?? 10} Video", style: TextStyle(fontSize: 13, color: lightGrey)), // Gunakan data provider
                                         ],
                                       ),
                                       Spacer(),
@@ -214,7 +255,7 @@ class _CourseDetailState extends State<CourseDetail> {
                                           children: [
                                             SvgPicture.asset("assets/icons/star.svg", width: 20),
                                             SizedBox(width: 5),
-                                            Text("4.5 (100 ulasan)", style: TextStyle(fontSize: 12, fontWeight: semibold))
+                                            Text("${courseDetail?.rating.average.toString() ?? 4.5} (${courseDetail?.rating.count.toString() ?? 100} ulasan)", style: TextStyle(fontSize: 12, fontWeight: semibold)) // Gunakan data provider
                                           ],
                                         ),
                                       )
@@ -230,7 +271,6 @@ class _CourseDetailState extends State<CourseDetail> {
                   ],
                 ),
               ),
-
               Positioned(
                 bottom: 0,
                 left: 0,

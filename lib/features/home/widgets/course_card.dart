@@ -29,7 +29,7 @@ class CourseCard extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => CourseDetail()),
+              MaterialPageRoute(builder: (_) => CourseDetail(courseId: "")),
             );
           },
           child: Container(

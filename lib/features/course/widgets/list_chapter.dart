@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hology_fe/providers/CourseDetailProvider/course_detail_provider.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:provider/provider.dart';
 
 class ListChapter extends StatefulWidget {
-  const ListChapter({super.key});
+  final String courseId;
+  const ListChapter({super.key, required this.courseId});
 
   @override
   State<ListChapter> createState() => _ListChapterState();
 }
 
 class _ListChapterState extends State<ListChapter> {
-  final List<Map<String, String>> chapters = [
-    {"title": "Pengenalan"},
-    {"title": "Apa itu React JS"},
-  ];
-
   String _formatDuration(Duration position) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     final minutes = twoDigits(position.inMinutes.remainder(60));
@@ -23,12 +21,17 @@ class _ListChapterState extends State<ListChapter> {
 
   @override
   Widget build(BuildContext context) {
+    final courseDetailProvider = Provider.of<CourseDetailProvider>(context);
+    final chapters = courseDetailProvider.courseDetail;
+
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: chapters.length,
+      itemCount: chapters?.lesson.length ?? 0,
       itemBuilder: (context, index) {
-        final chapter = chapters[index];
+        final chapter = chapters!.lesson[index];
+        final sequence = index + 1;
+        
         return Container(
           margin: const EdgeInsets.only(bottom: 15),
           height: 70,
@@ -52,7 +55,7 @@ class _ListChapterState extends State<ListChapter> {
                 padding: const EdgeInsets.all(13),
                 child: Center(
                   child: Text(
-                    index.toString(),
+                    sequence.toString(),
                     style: TextStyle(fontWeight: semibold),
                   ),
                 ),
@@ -64,12 +67,9 @@ class _ListChapterState extends State<ListChapter> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      chapter["title"]!,
-                      style: TextStyle(
-                        fontWeight: semibold,
-                        fontSize: 15,
-                      ),
-                      maxLines: 1, 
+                      chapter.title,
+                      style: TextStyle(fontWeight: semibold, fontSize: 15),
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
