@@ -15,6 +15,14 @@ class Course extends StatefulWidget {
 
 class _CourseState extends State<Course> {
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      Provider.of<CourseListProvider>(context, listen: false).fetchCourses();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -45,7 +53,10 @@ class _CourseState extends State<Course> {
                           child: TextField(
                             textAlignVertical: TextAlignVertical.center,
                             onChanged: (value) {
-                              Provider.of<CourseListProvider>(context, listen: false).setSearchQuery(value);
+                              Provider.of<CourseListProvider>(
+                                context,
+                                listen: false,
+                              ).setSearchQuery(value);
                             },
                             decoration: InputDecoration(
                               hintText: "Cari kursus",
@@ -68,7 +79,7 @@ class _CourseState extends State<Course> {
                         SizedBox(height: 25),
                         CategoryTimeSlider(),
                         SizedBox(height: 20),
-                        CourseCard()
+                        CourseCard(),
                       ],
                     ),
                   ),

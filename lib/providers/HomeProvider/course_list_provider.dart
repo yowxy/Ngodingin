@@ -56,13 +56,15 @@ class CourseListProvider extends ChangeNotifier {
       }
       params['filter'] = _filter;
     }
+
     final uri = Uri.parse(url).replace(queryParameters: params);
+
+    print("Final URL dipanggil: $uri");
+
     try {
       final response = await http.get(
         uri,
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
       if (response.statusCode == 200) {
         final res = json.decode(response.body);

@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.poppins().fontFamily,
       ),
       debugShowCheckedModeBanner: false,
-      home: const Mission(),
+      home: const SplashPage(),
     );
   }
 }
