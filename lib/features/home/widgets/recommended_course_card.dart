@@ -19,7 +19,7 @@ class RecommendedCourseCard extends StatelessWidget {
     if (courses.isEmpty) {
       return Center(child: Text('Tidak ada kursus ditemukan'));
     }
-    
+
     return SizedBox(
       height: 245,
       child: ListView.builder(
@@ -42,7 +42,6 @@ class RecommendedCourseCard extends StatelessWidget {
                   ),
                 ),
               );
-              print("Course ID : $courseId");
             },
             child: Container(
               width: 230,
@@ -63,8 +62,8 @@ class RecommendedCourseCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: course['banner_url'] != null
+                    borderRadius: BorderRadius.circular(10),
+                    child: course['thumbnail_url'] != null
                         ? Image.network(
                             course['banner_url'],
                             height: 120,

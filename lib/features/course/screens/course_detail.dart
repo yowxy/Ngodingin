@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hology_fe/features/course/widgets/list_chapter.dart';
 import 'package:hology_fe/features/course/widgets/rating_bottom_sheet.dart';
+import 'package:hology_fe/features/leaderboard/screen/leaderboard.dart';
 import 'package:hology_fe/providers/CourseDetailProvider/course_detail_provider.dart';
 import 'package:hology_fe/shared/theme.dart';
 import 'package:provider/provider.dart';
@@ -330,8 +331,30 @@ class _CourseDetailState extends State<CourseDetail> {
                               fontSize: 16,
                             ),
                           ),
-                          onPressed: () {},
-                          child: const Text("Daftar"),
+                          onPressed: () {
+                            if (courseDetail != null) {
+                              if (courseDetail.isEnrolled) {
+                                // Arahkan ke halaman Leaderboard
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Leaderboard(),
+                                  ),
+                                );
+                              } else {
+                                // Jalankan fungsi daftar
+                                courseDetailProvider.enrollCourse(
+                                  courseDetail.course.id,
+                                  context: context,
+                                );
+                              }
+                            }
+                          },
+                          child: Text(
+                            courseDetail?.isEnrolled == true
+                                ? "Leaderboard"
+                                : "Daftar",
+                          ),
                         ),
                       ),
                     ],

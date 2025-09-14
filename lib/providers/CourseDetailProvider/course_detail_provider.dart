@@ -108,6 +108,55 @@ class CourseDetailProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> enrollCourse(String courseId, {BuildContext? context}) async {
+    final token = await DatabaseProvider().getToken();
+    _isLoading = true;
+    _resMessage = null;
+    notifyListeners();
+
+    final url = "$requestBaseUrl/courses/enroll";
+    final body = {"course_id": courseId};
+
+    try {
+      http.Response req = await http.post(
+        Uri.parse(url),
+        body: json.encode(body),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (req.statusCode == 200 || req.statusCode == 201) {
+        final res = json.decode(req.body);
+        _isLoading = false;
+        _resMessage = res['message'] ?? "Berhasil mendaftar course";
+        notifyListeners();
+
+        await fetchCourseDetail();
+
+        successMessage(message: _resMessage, context: context);
+      } else {
+        final res = json.decode(req.body);
+        _isLoading = false;
+        _resMessage = res['message'] ?? "Gagal mendaftar course";
+        notifyListeners();
+        errorMessage(message: _resMessage, context: context);
+      }
+    } on SocketException catch (_) {
+      _isLoading = false;
+      _resMessage = "Koneksi internet tidak tersedia";
+      notifyListeners();
+      errorMessage(message: _resMessage, context: context);
+    } catch (e) {
+      _isLoading = false;
+      _resMessage = "Terjadi kesalahan, silakan coba lagi";
+      notifyListeners();
+      print("Enroll error: $e");
+      errorMessage(message: _resMessage, context: context);
+    }
+  }
+
   Future<void> refresh() async {
     await fetchCourseDetail();
   }
