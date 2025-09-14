@@ -184,7 +184,6 @@ class AuthenticationProvider extends ChangeNotifier {
         final token = res['data']['access_token'];
         DatabaseProvider().saveToken(token);
         DatabaseProvider().saveUserId(userId);
-        print(res);
         _isLoading = false;
         _resMessage = res['message'] ?? "Email berhasil diverifikasi!";
         notifyListeners();

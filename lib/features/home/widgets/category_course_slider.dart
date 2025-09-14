@@ -26,27 +26,23 @@ class _CategoryCourseSliderState extends State<CategoryCourseSlider> {
     final homeDataProvider = Provider.of<HomeDataProvider>(context);
     final categories = homeDataProvider.categories.isNotEmpty
         ? homeDataProvider.categories
-        : [
-            "Semua",
-            "Frontend",
-            "Backend",
-            "UI/UX",
-            "Machine Learning",
-            "Mobile"
-          ];
+        : [ ];
     return SizedBox(
       height: 30,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
         itemBuilder: (context, index) {
+          final category = categories[index];
           final isSelected = _selectedIndex == index;
+
           return GestureDetector(
             onTap: () {
               setState(() {
                 _selectedIndex = index;
               });
-              homeDataProvider.setCategory(categories[index]);
+              homeDataProvider.setCategory(category['id'] ?? '');
+              print("Categoriii : ${category['id']}");
             },
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 3),
@@ -57,7 +53,7 @@ class _CategoryCourseSliderState extends State<CategoryCourseSlider> {
                 border: Border.all(color: Colors.green.shade400),
               ),
               child: Text(
-                categories[index],
+                category['name'] ?? '',
                 style: TextStyle(
                   color: isSelected ? Colors.white : Colors.green.shade400,
                   fontWeight: FontWeight.w500,

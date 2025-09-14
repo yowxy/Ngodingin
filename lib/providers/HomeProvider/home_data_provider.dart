@@ -10,7 +10,7 @@ class HomeDataProvider extends ChangeNotifier {
   List<Map<String, dynamic>> _recommendedCourses = [];
   List<EnrolledCourse> _enrolledCourses = [];
   List<Map<String, dynamic>> _allCourses = [];
-  List<String> _categories = [];
+  List<Map<String, dynamic>> _categories = [];
   bool _isLoading = false;
   String _selectedCategory = '';
   String _searchQuery = '';
@@ -18,7 +18,7 @@ class HomeDataProvider extends ChangeNotifier {
   List<Map<String, dynamic>> get recommendedCourses => _recommendedCourses;
   List<EnrolledCourse> get enrolledCourses => _enrolledCourses;
   List<Map<String, dynamic>> get allCourses => _allCourses;
-  List<String> get categories => _categories;
+  List<Map<String, dynamic>> get categories => _categories;
   bool get isLoading => _isLoading;
   String get selectedCategory => _selectedCategory;
   String get searchQuery => _searchQuery;
@@ -43,17 +43,19 @@ class HomeDataProvider extends ChangeNotifier {
     try {
       final response = await http.get(
         Uri.parse(url),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
       if (response.statusCode == 200) {
         final res = json.decode(response.body);
         final data = res['data'];
         final List<dynamic> recommendedList = data['recommended_courses'] ?? [];
-        _recommendedCourses = recommendedList.map((e) => Map<String, dynamic>.from(e)).toList();
+        _recommendedCourses = recommendedList
+            .map((e) => Map<String, dynamic>.from(e))
+            .toList();
         final List<dynamic> enrolledList = data['enrolled_courses'] ?? [];
-        _enrolledCourses = enrolledList.map((e) => EnrolledCourse.fromJson(e)).toList();
+        _enrolledCourses = enrolledList
+            .map((e) => EnrolledCourse.fromJson(e))
+            .toList();
         final List<dynamic> allList = data['all_courses'] ?? [];
         _allCourses = allList.map((e) => Map<String, dynamic>.from(e)).toList();
         print(_allCourses);
@@ -79,17 +81,19 @@ class HomeDataProvider extends ChangeNotifier {
     try {
       final response = await http.get(
         Uri.parse(url),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
       if (response.statusCode == 200) {
         final res = json.decode(response.body);
         final data = res['data'];
         final List<dynamic> recommendedList = data['recommended_courses'] ?? [];
-        _recommendedCourses = recommendedList.map((e) => Map<String, dynamic>.from(e)).toList();
+        _recommendedCourses = recommendedList
+            .map((e) => Map<String, dynamic>.from(e))
+            .toList();
         final List<dynamic> enrolledList = data['enrolled_courses'] ?? [];
-        _enrolledCourses = enrolledList.map((e) => EnrolledCourse.fromJson(e)).toList();
+        _enrolledCourses = enrolledList
+            .map((e) => EnrolledCourse.fromJson(e))
+            .toList();
         final List<dynamic> allList = data['all_courses'] ?? [];
         _allCourses = allList.map((e) => Map<String, dynamic>.from(e)).toList();
       } else {
@@ -112,19 +116,36 @@ class HomeDataProvider extends ChangeNotifier {
     try {
       final response = await http.get(
         Uri.parse(url),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
+
       if (response.statusCode == 200) {
         final res = json.decode(response.body);
-        final List<dynamic> categoryList = res['data'] ?? [];
-        _categories = categoryList.map((e) => e['name'].toString()).toList();
+        final List<dynamic> rawCategories = res['data'] ?? [];
+
+        _categories = rawCategories.map<Map<String, dynamic>>((e) {
+          if (e is String) {
+            return {"id": e, "name": e};
+          } else if (e is Map<String, dynamic>) {
+            return e;
+          } else {
+            return {"id": "", "name": e.toString()};
+          }
+        }).toList();
+
+        _categories.insert(0, {
+          "id": "",
+          "name": "Semua",
+        });
       } else {
-        _categories = [];
+        _categories = [
+          {"id": "", "name": "Semua"},
+        ];
       }
     } catch (e) {
-      _categories = [];
+      _categories = [
+        {"id": "", "name": "Semua"},
+      ];
     }
     notifyListeners();
   }
@@ -132,27 +153,50 @@ class HomeDataProvider extends ChangeNotifier {
   Future<void> fetchCoursesByCategory(String categoryId) async {
     _isLoading = true;
     notifyListeners();
-    String url = "$requestBaseUrl/home/category/$categoryId";
+
+    String url;
+    if (categoryId.isEmpty) {
+      url = "$requestBaseUrl/courses";
+    } else {
+      url = "$requestBaseUrl/home/category/$categoryId";
+    }
+
+    print("URL: $url");
     final token = await DatabaseProvider().getToken();
+
     try {
       final response = await http.get(
         Uri.parse(url),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
+
       if (response.statusCode == 200) {
         final res = json.decode(response.body);
         final data = res['data'];
-        // All Courses by category
-        final List<dynamic> allList = data['courses'] ?? [];
-        _allCourses = allList.map((e) => Map<String, dynamic>.from(e)).toList();
+        print("Data: $data");
+
+        List<dynamic> courseList;
+
+        if (categoryId.isEmpty) {
+          courseList = data is List ? data : (data['courses'] ?? []);
+        } else {
+          courseList = data['courses'] ?? [];
+        }
+
+        _allCourses = courseList
+            .map((e) => Map<String, dynamic>.from(e))
+            .toList();
+        _recommendedCourses = _allCourses;
       } else {
         _allCourses = [];
+        _recommendedCourses = [];
       }
     } catch (e) {
+      print("Error fetching courses: $e");
       _allCourses = [];
+      _recommendedCourses = [];
     }
+
     _isLoading = false;
     notifyListeners();
   }

@@ -23,11 +23,19 @@ class _CourseDetailState extends State<CourseDetail> {
   }
 
   void _showRatingBottomSheet() {
+    final courseDetailProvider = Provider.of<CourseDetailProvider>(
+      context,
+      listen: false,
+    );
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => const RatingBottomSheet(),
+      builder: (context) => ChangeNotifierProvider.value(
+        value: courseDetailProvider,
+        child: RatingBottomSheet(courseId: widget.courseId),
+      ),
     );
   }
 
@@ -36,24 +44,7 @@ class _CourseDetailState extends State<CourseDetail> {
     final courseDetailProvider = Provider.of<CourseDetailProvider>(context);
     final courseDetail = courseDetailProvider.courseDetail;
 
-    if (courseDetailProvider.isLoading) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Loading...",
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: semibold,
-              fontSize: 18,
-            ),
-          ),
-          centerTitle: true,
-        ),
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    if (courseDetailProvider.errorMessage != null) {
+    if (courseDetailProvider.errorUiMessage != null) {
       return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -70,7 +61,7 @@ class _CourseDetailState extends State<CourseDetail> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(courseDetailProvider.errorMessage!),
+              Text(courseDetailProvider.errorUiMessage!),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: courseDetailProvider.fetchCourseDetail,
@@ -198,7 +189,7 @@ class _CourseDetailState extends State<CourseDetail> {
                       child: TabBarView(
                         children: [
                           SingleChildScrollView(
-                            child: ListChapter(courseId: widget.courseId)
+                            child: ListChapter(courseId: widget.courseId),
                           ),
                           SingleChildScrollView(
                             child: Column(
@@ -214,7 +205,8 @@ class _CourseDetailState extends State<CourseDetail> {
                                     horizontal: 20,
                                   ),
                                   child: Text(
-                                    courseDetail?.course.description ?? "React JS adalah library JavaScript...", // Gunakan data provider
+                                    courseDetail?.course.description ??
+                                        "React JS adalah library JavaScript...",
                                     style: TextStyle(fontSize: 14),
                                   ),
                                 ),
@@ -238,27 +230,54 @@ class _CourseDetailState extends State<CourseDetail> {
                                       ),
                                       SizedBox(width: 10),
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Text("Total Video", style: TextStyle(fontWeight: semibold, fontSize: 15)),
-                                          Text("${courseDetail?.course.totalStudents.toString() ?? 10} Video", style: TextStyle(fontSize: 13, color: lightGrey)), // Gunakan data provider
+                                          Text(
+                                            "Total Video",
+                                            style: TextStyle(
+                                              fontWeight: semibold,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          Text(
+                                            "${courseDetail?.course.totalStudents.toString() ?? 10} Video",
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: lightGrey,
+                                            ),
+                                          ),
                                         ],
                                       ),
                                       Spacer(),
                                       Container(
                                         decoration: BoxDecoration(
                                           color: orangeColor.withOpacity(0.3),
-                                          borderRadius: BorderRadius.circular(99)
+                                          borderRadius: BorderRadius.circular(
+                                            99,
+                                          ),
                                         ),
-                                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 5,
+                                        ),
                                         child: Row(
                                           children: [
-                                            SvgPicture.asset("assets/icons/star.svg", width: 20),
+                                            SvgPicture.asset(
+                                              "assets/icons/star.svg",
+                                              width: 20,
+                                            ),
                                             SizedBox(width: 5),
-                                            Text("${courseDetail?.rating.average.toString() ?? 4.5} (${courseDetail?.rating.count.toString() ?? 100} ulasan)", style: TextStyle(fontSize: 12, fontWeight: semibold)) // Gunakan data provider
+                                            Text(
+                                              "${courseDetail?.rating.average.toString() ?? 4.5} (${courseDetail?.rating.count.toString() ?? 100} ulasan)",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: semibold,
+                                              ),
+                                            ),
                                           ],
                                         ),
-                                      )
+                                      ),
                                     ],
                                   ),
                                 ),
