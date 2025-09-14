@@ -54,27 +54,31 @@ class CourseCard extends StatelessWidget {
                   children: [
                     Image.network(course.image, height: 120, width: 120, fit: BoxFit.cover),
                     SizedBox(width: 15),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          course.title,
-                          style: TextStyle(fontSize: 14, fontWeight: semibold),
-                        ),
-                        SizedBox(height: 2),
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              "assets/icons/star.svg",
-                              height: 15,
-                              width: 15,
-                            ),
-                            SizedBox(width: 3),
-                            Text('${course.rating}', style: TextStyle(fontSize: 12)),
-                          ],
-                        ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            course.title,
+                            style: TextStyle(fontSize: 14, fontWeight: semibold),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(height: 2),
+                          Row(
+                            children: [
+                              SvgPicture.asset(
+                                "assets/icons/star.svg",
+                                height: 15,
+                                width: 15,
+                              ),
+                              SizedBox(width: 3),
+                              Text('${course.rating}', style: TextStyle(fontSize: 12)),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

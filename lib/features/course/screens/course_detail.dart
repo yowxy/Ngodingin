@@ -206,7 +206,7 @@ class _CourseDetailState extends State<CourseDetail> {
                                   ),
                                   child: Text(
                                     courseDetail?.course.description ??
-                                        "React JS adalah library JavaScript...", // Gunakan data provider
+                                        "React JS adalah library JavaScript...",
                                     style: TextStyle(fontSize: 14),
                                   ),
                                 ),
@@ -246,7 +246,7 @@ class _CourseDetailState extends State<CourseDetail> {
                                               fontSize: 13,
                                               color: lightGrey,
                                             ),
-                                          ), // Gunakan data provider
+                                          ),
                                         ],
                                       ),
                                       Spacer(),
@@ -274,7 +274,7 @@ class _CourseDetailState extends State<CourseDetail> {
                                                 fontSize: 12,
                                                 fontWeight: semibold,
                                               ),
-                                            ), // Gunakan data provider
+                                            ),
                                           ],
                                         ),
                                       ),
