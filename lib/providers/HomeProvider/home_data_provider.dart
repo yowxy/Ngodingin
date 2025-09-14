@@ -31,7 +31,13 @@ class HomeDataProvider extends ChangeNotifier {
 
   void setSearchQuery(String query) {
     _searchQuery = query;
-    fetchSearchData(query);
+
+    if (_searchQuery.trim().isEmpty) {
+      fetchHomeData();
+    } else {
+      fetchSearchData(_searchQuery);
+    }
+
     notifyListeners();
   }
 
@@ -58,7 +64,6 @@ class HomeDataProvider extends ChangeNotifier {
             .toList();
         final List<dynamic> allList = data['all_courses'] ?? [];
         _allCourses = allList.map((e) => Map<String, dynamic>.from(e)).toList();
-        print(_allCourses);
       } else {
         _recommendedCourses = [];
         _enrolledCourses = [];
@@ -133,10 +138,7 @@ class HomeDataProvider extends ChangeNotifier {
           }
         }).toList();
 
-        _categories.insert(0, {
-          "id": "",
-          "name": "Semua",
-        });
+        _categories.insert(0, {"id": "", "name": "Semua"});
       } else {
         _categories = [
           {"id": "", "name": "Semua"},

@@ -35,6 +35,7 @@ class CourseListProvider extends ChangeNotifier {
 
   void setSearchQuery(String query) {
     _searchQuery = query;
+    print("Search query : $_searchQuery");
     fetchCourses();
     notifyListeners();
   }
