@@ -31,7 +31,7 @@ class _ListChapterState extends State<ListChapter> {
       itemBuilder: (context, index) {
         final chapter = chapters!.lesson[index];
         final sequence = index + 1;
-        
+
         return Container(
           margin: const EdgeInsets.only(bottom: 15),
           height: 70,

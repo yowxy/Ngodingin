@@ -6,8 +6,9 @@ class CourseDetail {
   final Course course;
   final List<Lesson> lesson;
   final Rating rating;
+  final bool isEnrolled;
 
-  CourseDetail({required this.course, required this.lesson, required this.rating});
+  CourseDetail({required this.course, required this.lesson, required this.rating, required this.isEnrolled});
 
   factory CourseDetail.fromJson(Map<String, dynamic> json) {
     var lessonList = json['lessons'] as List? ?? [];
@@ -15,6 +16,7 @@ class CourseDetail {
       course: Course.fromJson(json['course'] ?? {}),
       lesson: lessonList.map((e) => Lesson.fromJson(e)).toList(),
       rating: Rating.fromJson(json['rating'] ?? {}),
+      isEnrolled: json['is_enrolled'] ?? false,
     );
   }
 

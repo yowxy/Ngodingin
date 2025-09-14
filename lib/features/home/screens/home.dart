@@ -90,7 +90,7 @@ class _HomeState extends State<Home> {
                         ),
                         SizedBox(height: 10),
                         MyCourseCard(),
-                        SizedBox(height: 20), // Tambahan agar tidak overflow di bawah
+                        SizedBox(height: 20),
                       ],
                     ),
                   ),
