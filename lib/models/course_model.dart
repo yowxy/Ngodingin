@@ -2,7 +2,8 @@ class Course {
   final String id;
   final String title;
   final String description;
-  final String image;
+  final String bannerUrl;
+  final String thumbnailUrl;
   final String instructor;
   final String category;
   final int totalStudents;
@@ -13,7 +14,8 @@ class Course {
     required this.id,
     required this.title,
     required this.description,
-    required this.image,
+    required this.bannerUrl,
+    required this.thumbnailUrl,
     required this.instructor,
     required this.category,
     required this.totalStudents,
@@ -26,7 +28,8 @@ class Course {
       id: json['id'].toString(),
       title: json['title'] ?? '',
       description: json['description'] ?? '',
-      image: json['image'] ?? '',
+      bannerUrl: json['banner_url'] ?? '',
+      thumbnailUrl: json['thumbnail_url'] ?? '',
       instructor: json['instructor']?['name'] ?? '',
       category: json['category']?['name'] ?? '',
       totalStudents: json['total_students'] ?? 0,

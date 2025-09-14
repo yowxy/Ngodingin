@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hology_fe/features/mission/widgets/list_mission.dart';
+import 'package:hology_fe/features/mission/widgets/list_mission_weekly.dart';
+import 'package:hology_fe/providers/QuestProvider/quest_provider.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:hology_fe/features/home/screens/home.dart';
+import 'package:provider/provider.dart';
 
 class Mission extends StatefulWidget {
   const Mission({super.key});
@@ -16,6 +20,11 @@ class _MissionState extends State<Mission> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    Future.microtask(() {
+      final questProvider = Provider.of<QuestProvider>(context, listen: false);
+      questProvider.fetchDailyQuests();
+      questProvider.fetchWeeklyQuests();
+    });
   }
 
   @override
@@ -26,68 +35,81 @@ class _MissionState extends State<Mission> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Misi",
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: semibold,
-              fontSize: 18,
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
+              onPressed: () {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => Home()),
+                  (route) => false,
+                );
+              },
             ),
-          ),
-          centerTitle: true,
+            SizedBox(width: 4),
+            Text(
+              "Misi",
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: semibold,
+                fontSize: 18,
+              ),
+            ),
+          ],
         ),
-        body: SafeArea(
-          child: Container(
-            color: whitegreenColor,
-            padding: EdgeInsets.all(20),
-            child: Column(
-              children: [
-                SizedBox(height: 10),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xff99D69D),
-                    borderRadius: BorderRadius.all(Radius.circular(99)),
-                  ),
-                  child: TabBar(
-                    controller: _tabController,
-                    indicator: BoxDecoration(
-                      color: greenColor,
-                      borderRadius: BorderRadius.horizontal(
-                        left: _tabController.index == 0
-                            ? const Radius.circular(99)
-                            : Radius.zero,
-                        right: _tabController.index == 1
-                            ? const Radius.circular(99)
-                            : Radius.zero,
-                      ),
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        child: Container(
+          color: whitegreenColor,
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              SizedBox(height: 10),
+              Container(
+                decoration: BoxDecoration(
+                  color: Color(0xff99D69D),
+                  borderRadius: BorderRadius.all(Radius.circular(99)),
+                ),
+                child: TabBar(
+                  controller: _tabController,
+                  indicator: BoxDecoration(
+                    color: greenColor,
+                    borderRadius: BorderRadius.horizontal(
+                      left: _tabController.index == 0
+                          ? const Radius.circular(99)
+                          : Radius.zero,
+                      right: _tabController.index == 1
+                          ? const Radius.circular(99)
+                          : Radius.zero,
                     ),
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    labelColor: whiteColor,
-                    unselectedLabelColor: whiteColor,
-                    onTap: (_) {
-                      setState(() {});
-                    },
-                    tabs: const [
-                      Tab(text: "Harian"),
-                      Tab(text: "Mingguan"),
-                    ],
                   ),
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  labelColor: whiteColor,
+                  unselectedLabelColor: whiteColor,
+                  onTap: (_) {
+                    setState(() {});
+                  },
+                  tabs: const [
+                    Tab(text: "Harian"),
+                    Tab(text: "Mingguan"),
+                  ],
                 ),
-                SizedBox(height: 25),
-                Expanded(
-                  child: TabBarView(
-                    children: [
-                      SingleChildScrollView(child: ListMission()),
-                      SingleChildScrollView(child: ListMission()),
-                    ],
-                  ),
+              ),
+              SizedBox(height: 25),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    SingleChildScrollView(child: ListMission()),
+                    SingleChildScrollView(child: ListMissionWeekly()),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

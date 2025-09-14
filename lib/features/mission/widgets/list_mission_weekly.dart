@@ -4,19 +4,19 @@ import 'package:provider/provider.dart';
 import 'package:hology_fe/providers/QuestProvider/quest_provider.dart';
 import 'package:hology_fe/utils/snack_message.dart';
 
-class ListMission extends StatelessWidget {
-  const ListMission({super.key});
+class ListMissionWeekly extends StatelessWidget {
+  const ListMissionWeekly({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<QuestProvider>(
       builder: (context, questProvider, _) {
-        if (questProvider.isLoadingDaily) {
+        if (questProvider.isLoadingWeekly) {
           return Center(child: CircularProgressIndicator());
         }
-        final missions = questProvider.dailyQuests;
+        final missions = questProvider.weeklyQuests;
         if (missions.isEmpty) {
-          return Center(child: Text('Tidak ada misi harian'));
+          return Center(child: Text('Tidak ada misi mingguan'));
         }
         return ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
@@ -86,7 +86,7 @@ class ListMission extends StatelessWidget {
                                 context: context,
                               );
                               // Refresh data
-                              questProvider.fetchDailyQuests();
+                              questProvider.fetchWeeklyQuests();
                             } else {
                               errorMessage(
                                 message: result['message'],
