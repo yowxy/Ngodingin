@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hology_fe/providers/HomeProvider/home_data_provider.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:provider/provider.dart';
 
 class MyCourseCard extends StatefulWidget {
   const MyCourseCard({super.key});
@@ -9,32 +11,18 @@ class MyCourseCard extends StatefulWidget {
 }
 
 class _MyCourseCardState extends State<MyCourseCard> {
-  final List<Map<String, String>> courses = [
-    {
-      "title": "React JS",
-      "desc": "Kursus react dari nol",
-      "image": "assets/images/react.png",
-      "videos": "10",
-      "duration": "10 Jam",
-    },
-    {
-      "title": "Flutter",
-      "desc": "Kursus flutter dari nol.",
-      "image": "assets/images/flutter.png",
-      "videos": "10",
-      "duration": "10 Jam",
-    },
-    {
-      "title": "Python",
-      "desc": "Kursus python dari nol.",
-      "image": "assets/images/python.png",
-      "videos": "10",
-      "duration": "10 Jam",
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final homeDataProvider = Provider.of<HomeDataProvider>(context);
+    final courses = homeDataProvider.enrolledCourses;
+
+    if (homeDataProvider.isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+    if (courses.isEmpty) {
+      return Center(child: Text('Tidak ada kursus ditemukan'));
+    }
+
     return SizedBox(
       height: 270,
       child: ListView.builder(
@@ -63,7 +51,7 @@ class _MyCourseCardState extends State<MyCourseCard> {
                 ClipRRect(
                   borderRadius: BorderRadiusGeometry.circular(16),
                   child: Image.asset(
-                    course["image"]!,
+                    course.thumbnailUrl,
                     height: 120,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -74,14 +62,14 @@ class _MyCourseCardState extends State<MyCourseCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      course["title"]!,
+                      course.title,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     Text(
-                      "Total video : ${course["videos"]!}",
+                      "Total video : ${course.totalVideo}",
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                     SizedBox(height: 10),

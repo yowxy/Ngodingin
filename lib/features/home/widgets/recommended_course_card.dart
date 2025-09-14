@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hology_fe/features/course/screens/course_detail.dart';
 import 'package:hology_fe/providers/CourseDetailProvider/course_detail_provider.dart';
+import 'package:hology_fe/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:hology_fe/providers/HomeProvider/home_data_provider.dart';
 
@@ -11,14 +12,16 @@ class RecommendedCourseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeDataProvider = Provider.of<HomeDataProvider>(context);
     final courses = homeDataProvider.recommendedCourses;
+
     if (homeDataProvider.isLoading) {
       return Center(child: CircularProgressIndicator());
     }
     if (courses.isEmpty) {
       return Center(child: Text('Tidak ada kursus ditemukan'));
     }
+    
     return SizedBox(
-      height: 230,
+      height: 245,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
@@ -26,6 +29,7 @@ class RecommendedCourseCard extends StatelessWidget {
         itemBuilder: (context, index) {
           final course = courses[index];
           final courseId = course['id'];
+          print("Course : $course");
 
           return InkWell(
             onTap: () {
@@ -60,9 +64,9 @@ class RecommendedCourseCard extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: course['image'] != null
+                    child: course['banner_url'] != null
                         ? Image.network(
-                            course['image'],
+                            course['banner_url'],
                             height: 120,
                             width: double.infinity,
                             fit: BoxFit.cover,
@@ -83,8 +87,10 @@ class RecommendedCourseCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        course['desc'] ?? '',
+                        course['description'] ?? '',
                         style: TextStyle(fontSize: 12, color: Colors.grey),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(height: 15),
                       Row(
@@ -114,8 +120,8 @@ class RecommendedCourseCard extends StatelessWidget {
                               ),
                               SizedBox(width: 4),
                               Text(
-                                course['duration']?.toString() ?? '',
-                                style: TextStyle(fontSize: 12),
+                                "${course['duration_hours']} Jam",
+                                style: TextStyle(fontSize: 12, color: lightGrey),
                               ),
                             ],
                           ),

@@ -41,8 +41,8 @@ class MyCourseList extends StatelessWidget {
           ),
           child: Row(
             children: [
-              course.image.isNotEmpty
-                  ? Image.network(course.image, height: 120, width: 120)
+              course.thumbnailUrl.isNotEmpty
+                  ? Image.network(course.thumbnailUrl, height: 120, width: 120)
                   : Container(height: 120, width: 120, color: Colors.grey[300]),
               const SizedBox(width: 15),
               Expanded(
@@ -65,7 +65,7 @@ class MyCourseList extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          course.progress,
+                          course.progressCourse.toString(),
                           style: TextStyle(fontSize: 16, fontWeight: semibold),
                         ),
                       ],

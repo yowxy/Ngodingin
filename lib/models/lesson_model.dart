@@ -28,4 +28,6 @@ class Lesson {
       isCompleted: json['is_completed'].toString() == "1",
     );
   }
+
+  toJson() {}
 }

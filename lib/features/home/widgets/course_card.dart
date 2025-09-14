@@ -63,20 +63,28 @@ class CourseCard extends StatelessWidget {
                 Expanded(
                   child: Row(
                     children: [
-                      Image.network(
-                        course.image,
-                        width: 115,
-                        height: 115,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            width: 115,
-                            height: 115,
-                            color: Colors.grey[300],
-                            child: Icon(Icons.broken_image),
-                          );
-                        },
-                      ),
+                      course.thumbnailUrl != ''
+                          ? Image.network(
+                              course.thumbnailUrl,
+                              width: 115,
+                              height: 115,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  width: 115,
+                                  height: 115,
+                                  color: Colors.grey[300],
+                                  child: Icon(Icons.broken_image),
+                                );
+                              },
+                            )
+                          : Container(
+                              width: 115,
+                              height: 115,
+                              color: Colors.grey[300],
+                              child: Icon(Icons.image_not_supported),
+                            ),
+
                       SizedBox(width: 15),
                       Expanded(
                         child: Column(
