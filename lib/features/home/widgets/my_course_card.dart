@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hology_fe/shared/theme.dart';
 
 class MyCourseCard extends StatefulWidget {
   const MyCourseCard({super.key});
@@ -13,21 +14,21 @@ class _MyCourseCardState extends State<MyCourseCard> {
       "title": "React JS",
       "desc": "Kursus react dari nol",
       "image": "assets/images/react.png",
-      "videos": "10 Video",
+      "videos": "10",
       "duration": "10 Jam",
     },
     {
       "title": "Flutter",
       "desc": "Kursus flutter dari nol.",
       "image": "assets/images/flutter.png",
-      "videos": "10 Video",
+      "videos": "10",
       "duration": "10 Jam",
     },
     {
       "title": "Python",
       "desc": "Kursus python dari nol.",
       "image": "assets/images/python.png",
-      "videos": "10 Video",
+      "videos": "10",
       "duration": "10 Jam",
     },
   ];
@@ -35,7 +36,7 @@ class _MyCourseCardState extends State<MyCourseCard> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 230,
+      height: 270,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: courses.length,
@@ -80,41 +81,50 @@ class _MyCourseCardState extends State<MyCourseCard> {
                       ),
                     ),
                     Text(
-                      course["desc"]!,
+                      "Total video : ${course["videos"]!}",
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
+                    SizedBox(height: 10),
+                    Container(
+                      width: double.infinity,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: greenColor,
+                        borderRadius: BorderRadius.circular(99),
+                      ),
+                    ),
                     SizedBox(height: 15),
+                    Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: lightGrey.withOpacity(0.5),
+                    ),
+                    SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.play_circle_fill,
-                              size: 18,
-                              color: Colors.green,
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              course["videos"]!,
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ],
+                        Expanded(
+                          child: Text(
+                            "Apa itu react js cihuys",
+                            style: TextStyle(fontSize: 12, color: lightGrey),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                         SizedBox(width: 12),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.access_time,
-                              size: 18,
-                              color: Colors.green,
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              course["duration"]!,
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ],
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: 18,
+                          ),
+                          decoration: BoxDecoration(
+                            color: orangeColor,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Text(
+                            "Lanjut",
+                            style: TextStyle(color: whiteColor),
+                          ),
                         ),
                       ],
                     ),
