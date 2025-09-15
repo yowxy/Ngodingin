@@ -19,27 +19,29 @@ class _MyCourseCardState extends State<MyCourseCard> {
     final courses = homeDataProvider.enrolledCourses;
 
     if (homeDataProvider.isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
     if (courses.isEmpty) {
-      return Center(child: Text('Tidak ada kursus ditemukan'));
+      return const Center(child: Text('Tidak ada kursus ditemukan'));
     }
 
     return SizedBox(
       height: 295,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         itemCount: courses.length,
         itemBuilder: (context, index) {
           final course = courses[index];
           return Container(
             width: 230,
-            padding: EdgeInsets.all(12),
-            margin: EdgeInsets.only(right: 20),
+            padding: const EdgeInsets.all(12),
+            margin: const EdgeInsets.only(right: 20),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Colors.black12,
                   blurRadius: 6,
@@ -51,7 +53,7 @@ class _MyCourseCardState extends State<MyCourseCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadiusGeometry.circular(10),
+                  borderRadius: BorderRadius.circular(10),
                   child: Image.network(
                     course.thumbnailUrl,
                     height: 120,
@@ -59,22 +61,23 @@ class _MyCourseCardState extends State<MyCourseCard> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       course.title,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     Text(
                       "Total video : ${course.totalVideo}",
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                      style:
+                          const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Container(
                       width: double.infinity,
                       height: 5,
@@ -83,13 +86,13 @@ class _MyCourseCardState extends State<MyCourseCard> {
                         borderRadius: BorderRadius.circular(99),
                       ),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     Container(
                       height: 1,
                       width: double.infinity,
                       color: lightGrey.withOpacity(0.3),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -101,7 +104,7 @@ class _MyCourseCardState extends State<MyCourseCard> {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        SizedBox(width: 12),
+                        const SizedBox(width: 12),
                         InkWell(
                           onTap: () {
                             Navigator.push(
@@ -116,7 +119,7 @@ class _MyCourseCardState extends State<MyCourseCard> {
                             );
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                               vertical: 5,
                               horizontal: 18,
                             ),
