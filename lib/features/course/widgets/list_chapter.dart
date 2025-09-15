@@ -12,11 +12,70 @@ class ListChapter extends StatefulWidget {
 }
 
 class _ListChapterState extends State<ListChapter> {
-  String _formatDuration(Duration position) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    final minutes = twoDigits(position.inMinutes.remainder(60));
-    final seconds = twoDigits(position.inSeconds.remainder(60));
-    return "$minutes:$seconds";
+  Widget _buildActionButton(lesson, bool isActiveLesson, bool isUnlocked, courseDetailProvider, bool hasActiveLesson) {
+    // If lesson is completed, show check
+    if (lesson.isCompleted) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.blue,
+          borderRadius: BorderRadius.circular(99),
+        ),
+        margin: const EdgeInsets.only(right: 3),
+        padding: const EdgeInsets.all(13),
+        child: const Icon(Icons.check, color: Colors.white, size: 20),
+      );
+    }
+
+    // Locked lessons
+    if (!isUnlocked) {
+      return Container(
+        decoration: BoxDecoration(
+          color: lightGrey,
+          borderRadius: BorderRadius.circular(99),
+        ),
+        margin: const EdgeInsets.only(right: 3),
+        padding: const EdgeInsets.all(13),
+        child: const Icon(Icons.lock, color: Colors.white, size: 20),
+      );
+    }
+
+    // If there is an active lesson, only it should show a "Finish" button
+    if (hasActiveLesson) {
+      if (isActiveLesson) {
+        return ElevatedButton.icon(
+          onPressed: () {
+            courseDetailProvider.finishLesson(lesson.id, context: context);
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: orangeColor,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          ),
+          icon: const Icon(Icons.flag),
+          label: const Text("Selesaikan"),
+        );
+      } else {
+        // Other unlocked lessons should not be actionable while another is active
+        return const SizedBox.shrink();
+      }
+    }
+
+    // No active lesson yet (user just enrolled): allow starting the first unlocked lesson
+    return GestureDetector(
+      onTap: () {
+        courseDetailProvider.startLesson(lesson.id, context: context);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: orangeColor,
+          borderRadius: BorderRadius.circular(99),
+        ),
+        margin: const EdgeInsets.only(right: 3),
+        padding: const EdgeInsets.all(13),
+        child: const Icon(Icons.play_arrow, color: Colors.white, size: 20),
+      ),
+    );
   }
 
   @override
@@ -31,6 +90,19 @@ class _ListChapterState extends State<ListChapter> {
       itemBuilder: (context, index) {
         final chapter = chapters!.lesson[index];
         final sequence = index + 1;
+        
+        // Logika untuk menentukan apakah lesson terbuka
+  final activeLesson = chapters.activeLesson;
+  final isActiveLesson = activeLesson?.id == chapter.id;
+  final hasActiveLesson = activeLesson != null;
+        
+        // Lesson terbuka jika:
+        // 1. Sudah selesai
+        // 2. Adalah active lesson
+        // 3. Lesson pertama dan user sudah enrolled
+    final isUnlocked = chapter.isCompleted ||
+      isActiveLesson ||
+      (index == 0 && chapters.isEnrolled);
 
         return Container(
           margin: const EdgeInsets.only(bottom: 15),
@@ -48,7 +120,7 @@ class _ListChapterState extends State<ListChapter> {
                 width: 45,
                 height: 45,
                 decoration: BoxDecoration(
-                  color: lightGrey.withOpacity(0.5),
+                  color: isUnlocked ? greenColor.withOpacity(0.2) : lightGrey.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(99),
                 ),
                 margin: const EdgeInsets.only(left: 4),
@@ -56,7 +128,10 @@ class _ListChapterState extends State<ListChapter> {
                 child: Center(
                   child: Text(
                     sequence.toString(),
-                    style: TextStyle(fontWeight: semibold),
+                    style: TextStyle(
+                      fontWeight: semibold,
+                      color: isUnlocked ? greenColor : lightGrey,
+                    ),
                   ),
                 ),
               ),
@@ -68,27 +143,23 @@ class _ListChapterState extends State<ListChapter> {
                   children: [
                     Text(
                       chapter.title,
-                      style: TextStyle(fontWeight: semibold, fontSize: 15),
+                      style: TextStyle(
+                        fontWeight: semibold, 
+                        fontSize: 15,
+                        color: isUnlocked ? Colors.black : lightGrey,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      "${_formatDuration(const Duration(seconds: 1))} / ${_formatDuration(const Duration(minutes: 10))}",
+                      "${chapter.durationMinutes} menit",
                       style: TextStyle(fontSize: 13, color: lightGrey),
                     ),
                   ],
                 ),
               ),
-              SizedBox(width: 10),
-              Container(
-                decoration: BoxDecoration(
-                  color: greenColor,
-                  borderRadius: BorderRadius.circular(99),
-                ),
-                margin: const EdgeInsets.only(right: 3),
-                padding: const EdgeInsets.all(13),
-                child: Image.asset("assets/images/lock.png"),
-              ),
+              const SizedBox(width: 10),
+              _buildActionButton(chapter, isActiveLesson, isUnlocked, courseDetailProvider, hasActiveLesson),
             ],
           ),
         );

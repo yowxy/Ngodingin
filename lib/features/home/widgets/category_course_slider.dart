@@ -41,7 +41,7 @@ class _CategoryCourseSliderState extends State<CategoryCourseSlider> {
               setState(() {
                 _selectedIndex = index;
               });
-              homeDataProvider.setCategory(category['id'] ?? '');
+              homeDataProvider.setCategory(category['id'] ?? null);
               print("Categoriii : ${category['id']}");
             },
             child: Container(

@@ -338,7 +338,7 @@ class _CourseDetailState extends State<CourseDetail> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const Leaderboard(),
+                                    builder: (context) => Leaderboard(courseId: courseDetail.course.id),
                                   ),
                                 );
                               } else {
