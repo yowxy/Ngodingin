@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hology_fe/features/home/widgets/category_course_slider.dart';
+import 'package:hology_fe/features/home/widgets/favorite_course.dart';
 import 'package:hology_fe/features/home/widgets/header.dart';
 import 'package:hology_fe/features/home/widgets/my_course_card.dart';
 import 'package:hology_fe/features/home/widgets/recommended_course_card.dart';
@@ -46,9 +47,10 @@ class _HomeState extends State<Home> {
                               child: TextField(
                                 textAlignVertical: TextAlignVertical.center,
                                 onChanged: (value) {
-                                  Provider.of<HomeDataProvider>(context,
-                                          listen: false)
-                                      .setSearchQuery(value);
+                                  Provider.of<HomeDataProvider>(
+                                    context,
+                                    listen: false,
+                                  ).setSearchQuery(value);
                                 },
                                 decoration: InputDecoration(
                                   hintText: "Cari kursus",
@@ -90,14 +92,21 @@ class _HomeState extends State<Home> {
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
                           "Kursus Kamu",
-                          style: TextStyle(
-                            fontWeight: semibold,
-                            fontSize: 16,
-                          ),
+                          style: TextStyle(fontWeight: semibold, fontSize: 16),
                         ),
                       ),
                       const SizedBox(height: 10),
                       const MyCourseCard(),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          "Kursus Favorit",
+                          style: TextStyle(fontWeight: semibold, fontSize: 16),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      const FavoriteCourse(),
                       const SizedBox(height: 20),
                     ],
                   ),
