@@ -334,7 +334,6 @@ class _CourseDetailState extends State<CourseDetail> {
                           onPressed: () {
                             if (courseDetail != null) {
                               if (courseDetail.isEnrolled) {
-                                // Arahkan ke halaman Leaderboard
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -342,7 +341,6 @@ class _CourseDetailState extends State<CourseDetail> {
                                   ),
                                 );
                               } else {
-                                // Jalankan fungsi daftar
                                 courseDetailProvider.enrollCourse(
                                   courseDetail.course.id,
                                   context: context,

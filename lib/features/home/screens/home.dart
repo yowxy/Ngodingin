@@ -29,70 +29,77 @@ class _HomeState extends State<Home> {
                 width: double.infinity,
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 15),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: TextField(
-                            textAlignVertical: TextAlignVertical.center,
-                            onChanged: (value) {
-                              Provider.of<HomeDataProvider>(context, listen: false).setSearchQuery(value);
-                            },
-                            decoration: InputDecoration(
-                              hintText: "Cari kursus",
-                              hintStyle: TextStyle(
-                                fontSize: 14,
-                                color: lightGrey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 25),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                              suffixIcon: Icon(
-                                Icons.search,
-                                size: 28,
-                                color: lightGrey,
-                              ),
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 15,
+                              child: TextField(
+                                textAlignVertical: TextAlignVertical.center,
+                                onChanged: (value) {
+                                  Provider.of<HomeDataProvider>(context,
+                                          listen: false)
+                                      .setSearchQuery(value);
+                                },
+                                decoration: InputDecoration(
+                                  hintText: "Cari kursus",
+                                  hintStyle: TextStyle(
+                                    fontSize: 14,
+                                    color: lightGrey,
+                                  ),
+                                  suffixIcon: Icon(
+                                    Icons.search,
+                                    size: 28,
+                                    color: lightGrey,
+                                  ),
+                                  border: InputBorder.none,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                            const SizedBox(height: 25),
+                            Image.asset("assets/images/banner.png"),
+                            const SizedBox(height: 25),
+                            const Text(
+                              "Rekomendasi Kursus",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 25),
-                        Image.asset("assets/images/banner.png"),
-                        SizedBox(height: 25),
-                        Text(
-                          "Rekomendasi Kursus",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        CategoryCourseSlider(),
-                        SizedBox(height: 20),
-                        RecommendedCourseCard(),
-                        SizedBox(height: 25),
-                        Text(
+                      ),
+                      const SizedBox(height: 10),
+                      const CategoryCourseSlider(),
+                      const SizedBox(height: 20),
+                      RecommendedCourseCard(),
+                      const SizedBox(height: 25),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
                           "Kursus Kamu",
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(height: 10),
-                        MyCourseCard(),
-                        SizedBox(height: 20),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 10),
+                      MyCourseCard(),
+                      const SizedBox(height: 20),
+                    ],
                   ),
                 ),
               ),

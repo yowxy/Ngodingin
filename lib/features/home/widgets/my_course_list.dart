@@ -19,8 +19,8 @@ class MyCourseList extends StatelessWidget {
     }
 
     return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(), // ← TAMBAHKAN INI
-      shrinkWrap: true, // ← TAMBAHKAN INI
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
       itemCount: courses.length,
       itemBuilder: (context, index) {
         final course = courses[index];
@@ -44,7 +44,7 @@ class MyCourseList extends StatelessWidget {
               course.thumbnailUrl.isNotEmpty
                   ? Image.network(course.thumbnailUrl, height: 120, width: 120)
                   : Container(height: 120, width: 120, color: Colors.grey[300]),
-              const SizedBox(width: 15),
+              const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -64,12 +64,22 @@ class MyCourseList extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
+                        SizedBox(width: 10),
                         Text(
-                          course.progressCourse.toString(),
+                          "${course.progressCourse}%",
                           style: TextStyle(fontSize: 16, fontWeight: semibold),
                         ),
                       ],
                     ),
+                    SizedBox(height: 15),
+                    Container(
+                      width: double.infinity,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: greenColor,
+                        borderRadius: BorderRadius.circular(99)
+                      ),
+                    )
                   ],
                 ),
               ),

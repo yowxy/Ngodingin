@@ -24,14 +24,15 @@ class _CategoryCourseSliderState extends State<CategoryCourseSlider> {
   @override
   Widget build(BuildContext context) {
     final homeDataProvider = Provider.of<HomeDataProvider>(context);
-    final categories = homeDataProvider.categories.isNotEmpty
-        ? homeDataProvider.categories
-        : [ ];
+    final categories = homeDataProvider.categories;
+
     return SizedBox(
       height: 30,
-      child: ListView.builder(
+      child: ListView.separated(
         scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 20), // biar tidak kepotong
         itemCount: categories.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 10), // jarak antar item
         itemBuilder: (context, index) {
           final category = categories[index];
           final isSelected = _selectedIndex == index;
@@ -45,8 +46,7 @@ class _CategoryCourseSliderState extends State<CategoryCourseSlider> {
               print("Categoriii : ${category['id']}");
             },
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 3),
-              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
               decoration: BoxDecoration(
                 color: isSelected ? Colors.green.shade400 : Colors.transparent,
                 borderRadius: BorderRadius.circular(30),

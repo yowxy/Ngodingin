@@ -176,7 +176,7 @@ class _ProfileState extends State<Profile> {
                     bottom: 0,
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: MyCourseList(), // ← Hanya list course yang scrollable
+                      child: MyCourseList(),
                     ),
                   ),
                 ],
