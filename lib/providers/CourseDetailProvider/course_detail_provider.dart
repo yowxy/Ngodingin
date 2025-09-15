@@ -15,10 +15,12 @@ class CourseDetailProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorUiMessage;
   String? _resMessage;
+  String? _inProgressLessonId;
 
   CourseDetail? get courseDetail => _courseDetail;
   bool get isLoading => _isLoading;
   String? get errorUiMessage => _errorUiMessage;
+  String? get inProgressLessonId => _inProgressLessonId;
 
   CourseDetailProvider(this.courseId) {
     fetchCourseDetail();
@@ -167,7 +169,7 @@ class CourseDetailProvider extends ChangeNotifier {
     _resMessage = null;
     notifyListeners();
 
-    final url = "$requestBaseUrl/courses/complete-lesson";
+    final url = "$requestBaseUrl/courses/start-lesson";
     final body = {"lesson_id": lessonId};
 
     try {
@@ -184,6 +186,7 @@ class CourseDetailProvider extends ChangeNotifier {
         final res = json.decode(req.body);
         _isLoading = false;
         _resMessage = res['message'] ?? "Lesson berhasil dimulai";
+        _inProgressLessonId = lessonId;
         notifyListeners();
 
         await fetchCourseDetail();
@@ -210,13 +213,13 @@ class CourseDetailProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> finishLesson(String lessonId, {BuildContext? context}) async {
+  Future<List<Map<String, dynamic>>?> finishLesson(String lessonId, {BuildContext? context}) async {
     final token = await DatabaseProvider().getToken();
     _isLoading = true;
     _resMessage = null;
     notifyListeners();
 
-    final url = "$requestBaseUrl/courses/finish-lesson";
+    final url = "$requestBaseUrl/courses/complete-lesson";
     final body = {"lesson_id": lessonId};
 
     try {
@@ -231,31 +234,48 @@ class CourseDetailProvider extends ChangeNotifier {
 
       if (req.statusCode == 200 || req.statusCode == 201) {
         final res = json.decode(req.body);
+        print("Finish lesson response: $res"); // Debug log
         _isLoading = false;
         _resMessage = res['message'] ?? "Lesson berhasil diselesaikan";
         notifyListeners();
 
         await fetchCourseDetail();
 
+        // Clear in-progress if it matches the finished lesson
+        if (_inProgressLessonId == lessonId) {
+          _inProgressLessonId = null;
+        }
+
         successMessage(message: _resMessage, context: context);
+        // Extract quizzes if present
+        final data = res['data'] as Map<String, dynamic>?;
+        print("Data from response: $data"); // Debug log
+        final quizzes = data != null && data['quizzes'] is List
+            ? List<Map<String, dynamic>>.from(data['quizzes'] as List)
+            : null;
+        print("Parsed quizzes: $quizzes"); // Debug log
+        return quizzes;
       } else {
         final res = json.decode(req.body);
         _isLoading = false;
         _resMessage = res['message'] ?? "Gagal menyelesaikan lesson";
         notifyListeners();
         errorMessage(message: _resMessage, context: context);
+        return null;
       }
     } on SocketException catch (_) {
       _isLoading = false;
       _resMessage = "Koneksi internet tidak tersedia";
       notifyListeners();
       errorMessage(message: _resMessage, context: context);
+      return null;
     } catch (e) {
       _isLoading = false;
       _resMessage = "Terjadi kesalahan, silakan coba lagi";
       notifyListeners();
       print("Finish lesson error: $e");
       errorMessage(message: _resMessage, context: context);
+      return null;
     }
   }
 
@@ -263,6 +283,7 @@ class CourseDetailProvider extends ChangeNotifier {
     _courseDetail = null;
     _isLoading = false;
     _errorUiMessage = null;
+    _inProgressLessonId = null;
     notifyListeners();
   }
 

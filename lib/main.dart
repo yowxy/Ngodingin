@@ -5,6 +5,7 @@ import 'package:hology_fe/providers/Database/db_provider.dart';
 import 'package:hology_fe/providers/ProfileProvider/profile_course_provider.dart';
 import 'package:hology_fe/providers/ProfileProvider/profile_provider.dart';
 import 'package:hology_fe/providers/QuestProvider/quest_provider.dart';
+import 'package:hology_fe/providers/QuizProvider/quiz_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:hology_fe/providers/AuthProvider/auth_provider.dart';
 import 'package:hology_fe/providers/HomeProvider/home_provider.dart';
@@ -23,6 +24,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => ProfileCourseProvider()),
         ChangeNotifierProvider(create: (_) => QuestProvider()),
+        ChangeNotifierProvider(create: (_) => QuizProvider()),
       ],
       child: const MyApp(),
     ),

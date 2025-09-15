@@ -235,14 +235,14 @@ class _CourseDetailState extends State<CourseDetail> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "Total Video",
+                                            "Total Siswa",
                                             style: TextStyle(
                                               fontWeight: semibold,
                                               fontSize: 15,
                                             ),
                                           ),
                                           Text(
-                                            "${courseDetail?.course.totalStudents.toString() ?? 10} Video",
+                                            "${courseDetail?.course.totalStudents.toString() ?? 10} Siswa",
                                             style: TextStyle(
                                               fontSize: 13,
                                               color: lightGrey,
