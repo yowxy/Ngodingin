@@ -51,7 +51,6 @@ class _HeaderState extends State<Header> {
     );
 
     if (result == 'logout') {
-      // Trigger API logout
       final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
       authProvider.logout(token: '', context: context);
     }
@@ -81,7 +80,7 @@ class _HeaderState extends State<Header> {
                 "Halo,",
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: semibold,
                   color: grey,
                 ),
               ),
@@ -89,7 +88,7 @@ class _HeaderState extends State<Header> {
                 userName,
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: semibold,
                   color: Colors.black,
                 ),
               ),

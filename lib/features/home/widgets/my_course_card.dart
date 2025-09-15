@@ -26,7 +26,7 @@ class _MyCourseCardState extends State<MyCourseCard> {
     }
 
     return SizedBox(
-      height: 295,
+      height: 270,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
@@ -67,10 +67,12 @@ class _MyCourseCardState extends State<MyCourseCard> {
                   children: [
                     Text(
                       course.title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: semibold,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       "Total video : ${course.totalVideo}",
@@ -98,7 +100,7 @@ class _MyCourseCardState extends State<MyCourseCard> {
                       children: [
                         Expanded(
                           child: Text(
-                            course.activeLesson,
+                            course.activeLesson?.title ?? "Belum ada lesson aktif",
                             style: TextStyle(fontSize: 12, color: lightGrey),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,

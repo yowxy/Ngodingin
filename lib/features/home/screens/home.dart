@@ -71,10 +71,10 @@ class _HomeState extends State<Home> {
                             const SizedBox(height: 25),
                             Image.asset("assets/images/banner.png"),
                             const SizedBox(height: 25),
-                            const Text(
+                            Text(
                               "Rekomendasi Kursus",
                               style: TextStyle(
-                                fontWeight: FontWeight.w500,
+                                fontWeight: semibold,
                                 fontSize: 16,
                               ),
                             ),
@@ -84,20 +84,20 @@ class _HomeState extends State<Home> {
                       const SizedBox(height: 10),
                       const CategoryCourseSlider(),
                       const SizedBox(height: 20),
-                      RecommendedCourseCard(),
+                      const RecommendedCourseCard(),
                       const SizedBox(height: 25),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
                           "Kursus Kamu",
                           style: TextStyle(
-                            fontWeight: FontWeight.w500,
+                            fontWeight: semibold,
                             fontSize: 16,
                           ),
                         ),
                       ),
                       const SizedBox(height: 10),
-                      MyCourseCard(),
+                      const MyCourseCard(),
                       const SizedBox(height: 20),
                     ],
                   ),

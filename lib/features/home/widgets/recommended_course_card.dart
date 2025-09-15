@@ -21,7 +21,7 @@ class RecommendedCourseCard extends StatelessWidget {
     }
 
     return SizedBox(
-      height: 245,
+      height: 230,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
@@ -70,7 +70,7 @@ class RecommendedCourseCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                     child: course['thumbnail_url'] != null
                         ? Image.network(
-                            course['banner_url'],
+                            course['thumbnail_url'],
                             height: 120,
                             width: double.infinity,
                             fit: BoxFit.cover,
@@ -83,9 +83,9 @@ class RecommendedCourseCard extends StatelessWidget {
                     children: [
                       Text(
                         course['title'] ?? '',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: semibold,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -93,7 +93,7 @@ class RecommendedCourseCard extends StatelessWidget {
                       Text(
                         course['short_description'] ?? '',
                         style: TextStyle(fontSize: 12, color: Colors.grey),
-                        maxLines: 2,
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 15),
@@ -110,7 +110,7 @@ class RecommendedCourseCard extends StatelessWidget {
                               const SizedBox(width: 4),
                               Text(
                                 '${course['total_video']} Video',
-                                style: TextStyle(fontSize: 12),
+                                style: TextStyle(fontSize: 12, color: lightGrey),
                               ),
                             ],
                           ),

@@ -15,9 +15,17 @@ class _CategoryCourseSliderState extends State<CategoryCourseSlider> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      Provider.of<HomeDataProvider>(context, listen: false).fetchCategories();
-      Provider.of<HomeDataProvider>(context, listen: false).fetchHomeData();
+    Future.microtask(() async {
+      final provider = Provider.of<HomeDataProvider>(context, listen: false);
+      await provider.fetchCategories();
+      await provider.fetchHomeData();
+
+      if (provider.categories.isNotEmpty) {
+        setState(() {
+          _selectedIndex = 0;
+        });
+        provider.setCategory(provider.categories[0]['id']);
+      }
     });
   }
 
@@ -30,9 +38,9 @@ class _CategoryCourseSliderState extends State<CategoryCourseSlider> {
       height: 30,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 20), // biar tidak kepotong
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         itemCount: categories.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 10), // jarak antar item
+        separatorBuilder: (_, __) => const SizedBox(width: 10),
         itemBuilder: (context, index) {
           final category = categories[index];
           final isSelected = _selectedIndex == index;
@@ -43,7 +51,6 @@ class _CategoryCourseSliderState extends State<CategoryCourseSlider> {
                 _selectedIndex = index;
               });
               homeDataProvider.setCategory(category['id'] ?? null);
-              print("Categoriii : ${category['id']}");
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
