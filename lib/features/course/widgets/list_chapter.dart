@@ -14,20 +14,26 @@ class ListChapter extends StatefulWidget {
 
 class _ListChapterState extends State<ListChapter> {
   Widget _buildActionButton(lesson, bool isActiveLesson, bool isUnlocked, CourseDetailProvider courseDetailProvider, bool hasActiveLesson) {
-    // If lesson is completed, show check
+    // CEK COMPLETED TERLEBIH DAHULU (sebelum cek unlocked)
     if (lesson.isCompleted) {
-      return Container(
-        decoration: BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.circular(99),
+      return GestureDetector(
+        onTap: () {
+          // Call setActiveLesson API to make this lesson active again
+          courseDetailProvider.setActiveLesson(lesson.id, context: context);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.circular(99),
+          ),
+          margin: const EdgeInsets.only(right: 3),
+          padding: const EdgeInsets.all(13),
+          child: const Icon(Icons.check, color: Colors.white, size: 20),
         ),
-        margin: const EdgeInsets.only(right: 3),
-        padding: const EdgeInsets.all(13),
-        child: const Icon(Icons.check, color: Colors.white, size: 20),
       );
     }
 
-    // Locked lessons
+    // Locked lessons (SETELAH cek completed)
     if (!isUnlocked) {
       return Container(
         decoration: BoxDecoration(
@@ -40,73 +46,57 @@ class _ListChapterState extends State<ListChapter> {
       );
     }
 
-    // If there is an active lesson, only it should show Start/Finish control
-    if (hasActiveLesson) {
-      if (isActiveLesson) {
-        final String? inProgressId = courseDetailProvider.inProgressLessonId;
-        final bool isInProgress = inProgressId == lesson.id;
-  if (isInProgress) {
-          // Show Finish
-          return ElevatedButton.icon(
-            onPressed: () async {
-              final quizzesRaw = await courseDetailProvider.finishLesson(lesson.id, context: context);
-              print('quiz: $quizzesRaw');
-              if (!mounted) return;
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => QuizPages(
-                    lessonId: lesson.id,
-                    quizzesData: quizzesRaw ?? const [],
-                  ),
+    // HANYA active lesson yang bisa menampilkan tombol Mulai/Selesaikan
+    if (isActiveLesson) {
+      final String? inProgressId = courseDetailProvider.inProgressLessonId;
+      final bool isInProgress = inProgressId == lesson.id;
+
+      if (isInProgress) {
+        // Show Finish button
+        return ElevatedButton.icon(
+          onPressed: () async {
+            final quizzesRaw = await courseDetailProvider.finishLesson(lesson.id, context: context);
+            print('quiz: $quizzesRaw');
+            if (!mounted) return;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => QuizPages(
+                  lessonId: lesson.id,
+                  quizzesData: quizzesRaw ?? const [],
                 ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: orangeColor,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            ),
-            icon: const Icon(Icons.flag),
-            label: const Text("Selesaikan"),
-          );
-        } else {
-          // Show Start
-          return ElevatedButton.icon(
-            onPressed: () {
-              courseDetailProvider.startLesson(lesson.id, context: context);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: greenColor,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            ),
-            icon: const Icon(Icons.play_arrow),
-            label: const Text("Mulai"),
-          );
-        }
+              ),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: orangeColor,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          ),
+          icon: const Icon(Icons.flag),
+          label: const Text("Selesaikan"),
+        );
       } else {
-        // Other unlocked lessons should not be actionable while another is active
-        return const SizedBox.shrink();
+        // Show Start button
+        return ElevatedButton.icon(
+          onPressed: () {
+            courseDetailProvider.startLesson(lesson.id, context: context);
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: greenColor,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          ),
+          icon: const Icon(Icons.play_arrow),
+          label: const Text("Mulai"),
+        );
       }
     }
 
-    // No active lesson yet (user just enrolled): allow starting the first unlocked lesson
-    return ElevatedButton.icon(
-      onPressed: () {
-        courseDetailProvider.startLesson(lesson.id, context: context);
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: orangeColor,
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-      ),
-      icon: const Icon(Icons.play_arrow),
-      label: const Text("Mulai"),
-    );
+    // Semua lesson lain (yang bukan active lesson) tidak menampilkan tombol apapun
+    return const SizedBox.shrink();
   }
 
   @override
@@ -122,6 +112,10 @@ class _ListChapterState extends State<ListChapter> {
         final chapter = chapters!.lesson[index];
         final sequence = index + 1;
         
+        // DEBUG: Print data lesson untuk melihat field apa saja yang ada
+        print('DEBUG Chapter $sequence: ${chapter.toJson()}');
+        print('DEBUG isCompleted: ${chapter.isCompleted}');
+        
         // Logika untuk menentukan apakah lesson terbuka
         final activeLesson = chapters.activeLesson;
         final isActiveLesson = activeLesson?.id == chapter.id;
@@ -131,9 +125,9 @@ class _ListChapterState extends State<ListChapter> {
         // 1. Sudah selesai
         // 2. Adalah active lesson
         // 3. Lesson pertama dan user sudah enrolled
-    final isUnlocked = chapter.isCompleted ||
-      isActiveLesson ||
-      (index == 0 && chapters.isEnrolled);
+        final isUnlocked = chapter.isCompleted ||
+          isActiveLesson ||
+          (index == 0 && chapters.isEnrolled);
 
         return Container(
           margin: const EdgeInsets.only(bottom: 15),

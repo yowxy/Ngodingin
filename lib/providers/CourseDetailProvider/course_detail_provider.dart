@@ -279,6 +279,55 @@ class CourseDetailProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> setActiveLesson(String lessonId, {BuildContext? context}) async {
+    final token = await DatabaseProvider().getToken();
+    _isLoading = true;
+    _resMessage = null;
+    notifyListeners();
+
+    final url = "$requestBaseUrl/courses/set-active-lesson";
+    final body = {"lesson_id": lessonId};
+
+    try {
+      http.Response req = await http.post(
+        Uri.parse(url),
+        body: json.encode(body),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (req.statusCode == 200 || req.statusCode == 201) {
+        final res = json.decode(req.body);
+        _isLoading = false;
+        _resMessage = res['message'] ?? "Active lesson berhasil diubah";
+        notifyListeners();
+
+        await fetchCourseDetail();
+
+        successMessage(message: _resMessage, context: context);
+      } else {
+        final res = json.decode(req.body);
+        _isLoading = false;
+        _resMessage = res['message'] ?? "Gagal mengubah active lesson";
+        notifyListeners();
+        errorMessage(message: _resMessage, context: context);
+      }
+    } on SocketException catch (_) {
+      _isLoading = false;
+      _resMessage = "Koneksi internet tidak tersedia";
+      notifyListeners();
+      errorMessage(message: _resMessage, context: context);
+    } catch (e) {
+      _isLoading = false;
+      _resMessage = "Terjadi kesalahan, silakan coba lagi";
+      notifyListeners();
+      print("Set active lesson error: $e");
+      errorMessage(message: _resMessage, context: context);
+    }
+  }
+
   void reset() {
     _courseDetail = null;
     _isLoading = false;

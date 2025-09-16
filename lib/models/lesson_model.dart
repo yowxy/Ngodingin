@@ -22,12 +22,24 @@ class Lesson {
       id: json['id'],
       courseId: json['course_id'],
       title: json['title'],
-      videoUrl: json['video_url'],
-      durationMinutes: json["duration_minutes"],
-      lessonOrder: json['lesson_order'],
-      isCompleted: json['is_completed'].toString() == "1",
+      videoUrl: json['video_url'] ?? '',
+      durationMinutes: json["duration_minutes"] ?? 0,
+      lessonOrder: json['lesson_order'] ?? 0,
+      isCompleted: json['is_completed']?.toString() == "1" ||
+          json['is_completed'] == true ||
+          json['is_completed'] == 1,
     );
   }
 
-  toJson() {}
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'course_id': courseId,
+      'title': title,
+      'video_url': videoUrl,
+      'duration_minutes': durationMinutes,
+      'lesson_order': lessonOrder,
+      'is_completed': isCompleted,
+    };
+  }
 }

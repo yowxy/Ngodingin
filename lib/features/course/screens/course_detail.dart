@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hology_fe/features/course/widgets/course_video_player.dart';
 import 'package:hology_fe/features/course/widgets/list_chapter.dart';
 import 'package:hology_fe/features/course/widgets/rating_bottom_sheet.dart';
 import 'package:hology_fe/features/leaderboard/screen/leaderboard.dart';
@@ -101,69 +102,21 @@ class _CourseDetailState extends State<CourseDetail> {
                   children: [
                     AspectRatio(
                       aspectRatio: 16 / 9,
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.green.shade200,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: const Center(
-                              child: Icon(
-                                Icons.play_circle_fill,
-                                color: Colors.white,
-                                size: 64,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 8,
-                              ),
+                      child: courseDetail?.activeLesson?.videoUrl != null
+                          ? CourseVideoPlayer(videoUrl: courseDetail!.activeLesson!.videoUrl)
+                          : Container(
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.9),
-                                borderRadius: const BorderRadius.vertical(
-                                  bottom: Radius.circular(15),
+                                color: Colors.green.shade200,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.play_circle_fill,
+                                  color: Colors.white,
+                                  size: 64,
                                 ),
                               ),
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.play_circle_fill,
-                                    color: Colors.green,
-                                    size: 32,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    "${_formatDuration(const Duration(seconds: 1))} / ${_formatDuration(const Duration(minutes: 10))}",
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  const Icon(
-                                    Icons.volume_up,
-                                    color: Colors.green,
-                                  ),
-                                  SizedBox(width: 10),
-                                  const Icon(
-                                    Icons.fullscreen,
-                                    color: Colors.green,
-                                  ),
-                                ],
-                              ),
                             ),
-                          ),
-                        ],
-                      ),
                     ),
                     const SizedBox(height: 25),
                     Container(
