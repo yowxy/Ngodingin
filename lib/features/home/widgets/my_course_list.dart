@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:hology_fe/providers/HomeProvider/home_data_provider.dart';
 import 'package:hology_fe/shared/theme.dart';
@@ -72,14 +73,19 @@ class MyCourseList extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 15),
-                    Container(
-                      width: double.infinity,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: greenColor,
-                        borderRadius: BorderRadius.circular(99)
-                      ),
-                    )
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        return LinearPercentIndicator(
+                          width: constraints.maxWidth,
+                          lineHeight: 6,
+                          percent: course.progressCourse / 100,
+                          backgroundColor: lightGrey.withOpacity(0.5),
+                          progressColor: greenColor,
+                          padding: EdgeInsets.zero,
+                          barRadius: Radius.circular(99),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),

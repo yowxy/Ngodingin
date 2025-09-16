@@ -3,6 +3,7 @@ import 'package:hology_fe/features/course/screens/course_detail.dart';
 import 'package:hology_fe/providers/CourseDetailProvider/course_detail_provider.dart';
 import 'package:hology_fe/providers/HomeProvider/home_data_provider.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 class MyCourseCard extends StatefulWidget {
@@ -67,26 +68,28 @@ class _MyCourseCardState extends State<MyCourseCard> {
                   children: [
                     Text(
                       course.title,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: semibold,
-                      ),
+                      style: TextStyle(fontSize: 16, fontWeight: semibold),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       "Total video : ${course.totalVideo}",
-                      style:
-                          const TextStyle(fontSize: 12, color: Colors.grey),
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                     const SizedBox(height: 10),
-                    Container(
-                      width: double.infinity,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: greenColor,
-                        borderRadius: BorderRadius.circular(99),
-                      ),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        return LinearPercentIndicator(
+                          width:
+                              constraints.maxWidth,
+                          lineHeight: 6,
+                          percent: course.progressCourse / 100,
+                          backgroundColor: lightGrey.withOpacity(0.5),
+                          progressColor: greenColor,
+                          padding: EdgeInsets.zero,
+                          barRadius: Radius.circular(99),
+                        );
+                      },
                     ),
                     const SizedBox(height: 15),
                     Container(
@@ -100,7 +103,8 @@ class _MyCourseCardState extends State<MyCourseCard> {
                       children: [
                         Expanded(
                           child: Text(
-                            course.activeLesson?.title ?? "Belum ada lesson aktif",
+                            course.activeLesson?.title ??
+                                "Belum ada lesson aktif",
                             style: TextStyle(fontSize: 12, color: lightGrey),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
