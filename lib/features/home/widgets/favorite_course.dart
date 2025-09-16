@@ -5,14 +5,14 @@ import 'package:hology_fe/providers/HomeProvider/home_data_provider.dart';
 import 'package:hology_fe/shared/theme.dart';
 import 'package:provider/provider.dart';
 
-class MyCourseCard extends StatefulWidget {
-  const MyCourseCard({super.key});
+class FavoriteCourse extends StatefulWidget {
+  const FavoriteCourse({super.key});
 
   @override
-  State<MyCourseCard> createState() => _MyCourseCardState();
+  State<FavoriteCourse> createState() => _FavoriteCourseState();
 }
 
-class _MyCourseCardState extends State<MyCourseCard> {
+class _FavoriteCourseState extends State<FavoriteCourse> {
   @override
   Widget build(BuildContext context) {
     final homeDataProvider = Provider.of<HomeDataProvider>(context);

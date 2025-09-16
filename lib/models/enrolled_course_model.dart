@@ -12,7 +12,7 @@ class EnrolledCourse {
   final int totalVideo;
   final double totalDurationHours;
   final int progressCourse;
-  final String activeLesson;
+  final Lesson? activeLesson;
   final List<Lesson> lessons;
 
   EnrolledCourse({
@@ -42,10 +42,11 @@ class EnrolledCourse {
       rating: (json['rating'] ?? 0).toDouble(),
       isCompleted: json['is_completed'] ?? '0',
       totalVideo: json['total_video'] ?? 0,
-      totalDurationHours:
-          (json['total_duration_hours'] ?? 0).toDouble(),
+      totalDurationHours: (json['total_duration_hours'] ?? 0).toDouble(),
       progressCourse: json['progress_course'] ?? 0,
-      activeLesson: json['active_lesson'] ?? '',
+      activeLesson: json['active_lesson'] != null && json['active_lesson'] is Map<String, dynamic>
+          ? Lesson.fromJson(json['active_lesson'])
+          : null,
       lessons: (json['lessons'] as List<dynamic>?)
               ?.map((e) => Lesson.fromJson(e))
               .toList() ??
@@ -66,7 +67,7 @@ class EnrolledCourse {
       'total_video': totalVideo,
       'total_duration_hours': totalDurationHours,
       'progress_course': progressCourse,
-      'active_lesson': activeLesson,
+      'active_lesson': activeLesson?.toJson(),
       'lessons': lessons.map((e) => e.toJson()).toList(),
     };
   }

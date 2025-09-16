@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hology_fe/constants/url.dart';
 import 'package:hology_fe/models/quest_model.dart';
-import 'package:hology_fe/providers/database/db_provider.dart';
+import 'package:hology_fe/providers/Database/db_provider.dart';
 import 'package:http/http.dart' as http;
 
 class QuestProvider extends ChangeNotifier {

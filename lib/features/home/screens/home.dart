@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hology_fe/features/home/widgets/category_course_slider.dart';
+import 'package:hology_fe/features/home/widgets/favorite_course.dart';
 import 'package:hology_fe/features/home/widgets/header.dart';
 import 'package:hology_fe/features/home/widgets/my_course_card.dart';
 import 'package:hology_fe/features/home/widgets/recommended_course_card.dart';
@@ -46,9 +47,10 @@ class _HomeState extends State<Home> {
                               child: TextField(
                                 textAlignVertical: TextAlignVertical.center,
                                 onChanged: (value) {
-                                  Provider.of<HomeDataProvider>(context,
-                                          listen: false)
-                                      .setSearchQuery(value);
+                                  Provider.of<HomeDataProvider>(
+                                    context,
+                                    listen: false,
+                                  ).setSearchQuery(value);
                                 },
                                 decoration: InputDecoration(
                                   hintText: "Cari kursus",
@@ -71,10 +73,10 @@ class _HomeState extends State<Home> {
                             const SizedBox(height: 25),
                             Image.asset("assets/images/banner.png"),
                             const SizedBox(height: 25),
-                            const Text(
+                            Text(
                               "Rekomendasi Kursus",
                               style: TextStyle(
-                                fontWeight: FontWeight.w500,
+                                fontWeight: semibold,
                                 fontSize: 16,
                               ),
                             ),
@@ -84,20 +86,27 @@ class _HomeState extends State<Home> {
                       const SizedBox(height: 10),
                       const CategoryCourseSlider(),
                       const SizedBox(height: 20),
-                      RecommendedCourseCard(),
+                      const RecommendedCourseCard(),
                       const SizedBox(height: 25),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
                           "Kursus Kamu",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                          ),
+                          style: TextStyle(fontWeight: semibold, fontSize: 16),
                         ),
                       ),
                       const SizedBox(height: 10),
-                      MyCourseCard(),
+                      const MyCourseCard(),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          "Kursus Favorit",
+                          style: TextStyle(fontWeight: semibold, fontSize: 16),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      const FavoriteCourse(),
                       const SizedBox(height: 20),
                     ],
                   ),
