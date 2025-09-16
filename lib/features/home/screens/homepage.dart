@@ -5,6 +5,7 @@ import 'package:hology_fe/features/home/screens/course.dart';
 import 'package:hology_fe/features/home/screens/home.dart';
 import 'package:hology_fe/features/home/screens/profile.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -33,8 +34,8 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _selectedIndex == 3 
-        ? whiteColor // kalau tab Profile
-        : whitegreenColor, // selain itu
+        ? whiteColor 
+        : whitegreenColor,
       body: _screens[_selectedIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -45,10 +46,10 @@ class _HomepageState extends State<Homepage> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2), // warna bayangan
-              spreadRadius: 0.5, // seberapa jauh menyebar
-              blurRadius: 10, // tingkat blur
-              offset: const Offset(0, 1), // arah bayangan (x, y)
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 0.5,
+              blurRadius: 10, 
+              offset: const Offset(0, 1),
             ),
           ],
         ),
@@ -67,7 +68,7 @@ class _HomepageState extends State<Homepage> {
               tabs: const [
                 GButton(icon: Icons.home, text: "Home"),
                 GButton(icon: Icons.menu_book, text: "Kursus"),
-                GButton(icon: Icons.chat, text: "Chatbot"),
+                GButton(icon: LucideIcons.bot, text: "Chatbot"),
                 GButton(icon: Icons.person, text: "Profile"),
               ],
             ),
