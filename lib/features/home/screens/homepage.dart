@@ -32,7 +32,9 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whitegreenColor,
+      backgroundColor: _selectedIndex == 3 
+        ? whiteColor // kalau tab Profile
+        : whitegreenColor, // selain itu
       body: _screens[_selectedIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -41,6 +43,14 @@ class _HomepageState extends State<Homepage> {
             topLeft: Radius.circular(18),
             topRight: Radius.circular(18),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2), // warna bayangan
+              spreadRadius: 0.5, // seberapa jauh menyebar
+              blurRadius: 10, // tingkat blur
+              offset: const Offset(0, 1), // arah bayangan (x, y)
+            ),
+          ],
         ),
         child: SafeArea(
           child: Padding(
@@ -58,7 +68,7 @@ class _HomepageState extends State<Homepage> {
                 GButton(icon: Icons.home, text: "Home"),
                 GButton(icon: Icons.menu_book, text: "Kursus"),
                 GButton(icon: Icons.chat, text: "Chatbot"),
-                GButton(icon: Icons.person, text: "Profil"),
+                GButton(icon: Icons.person, text: "Profile"),
               ],
             ),
           ),
