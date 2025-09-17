@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:hology_fe/models/favorite_course_model.dart';
 import 'package:hology_fe/providers/Database/db_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ class HomeDataProvider extends ChangeNotifier {
   final requestBaseUrl = AppUrl.baseUrl;
   List<Map<String, dynamic>> _recommendedCourses = [];
   List<EnrolledCourse> _enrolledCourses = [];
+  List<FavoriteCourse> _favoriteCourses = [];
   List<Map<String, dynamic>> _allCourses = [];
   List<Map<String, dynamic>> _categories = [];
   bool _isLoading = false;
@@ -17,6 +19,7 @@ class HomeDataProvider extends ChangeNotifier {
 
   List<Map<String, dynamic>> get recommendedCourses => _recommendedCourses;
   List<EnrolledCourse> get enrolledCourses => _enrolledCourses;
+  List<FavoriteCourse> get favoriteCourses => _favoriteCourses;
   List<Map<String, dynamic>> get allCourses => _allCourses;
   List<Map<String, dynamic>> get categories => _categories;
   bool get isLoading => _isLoading;
@@ -62,16 +65,22 @@ class HomeDataProvider extends ChangeNotifier {
         _enrolledCourses = enrolledList
             .map((e) => EnrolledCourse.fromJson(e))
             .toList();
+        final List<dynamic> favoriteList = data['favorite_courses'] ?? [];
+        _favoriteCourses = favoriteList
+            .map((e) => FavoriteCourse.fromJson(e))
+            .toList();
         final List<dynamic> allList = data['all_courses'] ?? [];
         _allCourses = allList.map((e) => Map<String, dynamic>.from(e)).toList();
       } else {
         _recommendedCourses = [];
         _enrolledCourses = [];
+        _favoriteCourses = [];
         _allCourses = [];
       }
     } catch (e) {
       _recommendedCourses = [];
       _enrolledCourses = [];
+      _favoriteCourses = [];
       _allCourses = [];
     }
     _isLoading = false;
@@ -99,16 +108,22 @@ class HomeDataProvider extends ChangeNotifier {
         _enrolledCourses = enrolledList
             .map((e) => EnrolledCourse.fromJson(e))
             .toList();
+        final List<dynamic> favoriteList = data['favorite_courses'] ?? [];
+        _favoriteCourses = favoriteList
+            .map((e) => FavoriteCourse.fromJson(e))
+            .toList();
         final List<dynamic> allList = data['all_courses'] ?? [];
         _allCourses = allList.map((e) => Map<String, dynamic>.from(e)).toList();
       } else {
         _recommendedCourses = [];
         _enrolledCourses = [];
+        _favoriteCourses = [];
         _allCourses = [];
       }
     } catch (e) {
       _recommendedCourses = [];
       _enrolledCourses = [];
+      _favoriteCourses = [];
       _allCourses = [];
     }
     _isLoading = false;
@@ -158,7 +173,7 @@ class HomeDataProvider extends ChangeNotifier {
 
     String url;
     if (categoryId.isEmpty) {
-      url = "$requestBaseUrl/courses";
+      url = "$requestBaseUrl/home";
     } else {
       url = "$requestBaseUrl/home/category/$categoryId";
     }
@@ -177,26 +192,36 @@ class HomeDataProvider extends ChangeNotifier {
         final data = res['data'];
         print("Data: $data");
 
-        List<dynamic> courseList;
+        final List<dynamic> recommendedList = data['recommended_courses'] ?? [];
+        final List<dynamic> enrolledList = data['enrolled_courses'] ?? [];
+        final List<dynamic> favoriteList = data['favorite_courses'] ?? [];
+        final List<dynamic> allList = data['all_courses'] ?? [];
 
-        if (categoryId.isEmpty) {
-          courseList = data is List ? data : (data['courses'] ?? []);
-        } else {
-          courseList = data['courses'] ?? [];
-        }
-
-        _allCourses = courseList
+        _recommendedCourses = recommendedList
             .map((e) => Map<String, dynamic>.from(e))
             .toList();
-        _recommendedCourses = _allCourses;
+
+        _enrolledCourses = enrolledList
+            .map((e) => EnrolledCourse.fromJson(e))
+            .toList();
+
+        _favoriteCourses = favoriteList
+            .map((e) => FavoriteCourse.fromJson(e))
+            .toList();
+
+        _allCourses = allList.map((e) => Map<String, dynamic>.from(e)).toList();
       } else {
-        _allCourses = [];
         _recommendedCourses = [];
+        _enrolledCourses = [];
+        _favoriteCourses = [];
+        _allCourses = [];
       }
     } catch (e) {
       print("Error fetching courses: $e");
-      _allCourses = [];
       _recommendedCourses = [];
+      _enrolledCourses = [];
+      _favoriteCourses = [];
+      _allCourses = [];
     }
 
     _isLoading = false;
