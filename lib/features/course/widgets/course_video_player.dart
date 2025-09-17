@@ -18,6 +18,7 @@ class _CourseVideoPlayerState extends State<CourseVideoPlayer> {
   String? _currentVideoUrl;
   bool _isInitializing = false;
   bool _isYouTubeVideo = false;
+  bool _isPlayerReady = false;
 
   @override
   void initState() {
@@ -62,6 +63,7 @@ class _CourseVideoPlayerState extends State<CourseVideoPlayer> {
     print("Initializing video: $videoUrl");
     setState(() {
       _isInitializing = true;
+      _isPlayerReady = false;
     });
     
     _currentVideoUrl = videoUrl;
@@ -94,25 +96,24 @@ class _CourseVideoPlayerState extends State<CourseVideoPlayer> {
       
       if (videoId != null) {
         print("Creating YouTube controller with video ID: $videoId");
+        
+        // Coba dengan parameter yang lebih aman
         _youtubeController = YoutubePlayerController(
-          params: const YoutubePlayerParams(
+          params: YoutubePlayerParams(
             showControls: true,
             mute: false,
             showFullscreenButton: true,
             loop: false,
             enableCaption: true,
             captionLanguage: 'id',
-            color: 'red',
             showVideoAnnotations: false,
             enableJavaScript: true,
           ),
         );
         
-        // Load video dengan delay kecil untuk memastikan controller ready
-        Future.delayed(const Duration(milliseconds: 100), () {
+        Future.delayed(const Duration(milliseconds: 500), () {
           if (_youtubeController != null && mounted) {
             _youtubeController!.loadVideoById(videoId: videoId);
-            _youtubeController!.setVolume(100);
           }
         });
 
@@ -191,6 +192,7 @@ class _CourseVideoPlayerState extends State<CourseVideoPlayer> {
             
             setState(() {
               _isInitializing = false;
+              _isPlayerReady = true;
             });
           }
         }).catchError((error) {
@@ -220,7 +222,7 @@ class _CourseVideoPlayerState extends State<CourseVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    print("CourseVideoPlayer build - isInitializing: $_isInitializing, isYouTube: $_isYouTubeVideo, URL: ${widget.videoUrl}");
+    print("CourseVideoPlayer build - isInitializing: $_isInitializing, isYouTube: $_isYouTubeVideo, isReady: $_isPlayerReady, URL: ${widget.videoUrl}");
     
     if (_isInitializing) {
       return Container(
@@ -272,14 +274,19 @@ class _CourseVideoPlayerState extends State<CourseVideoPlayer> {
         );
       }
 
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: SizedBox(
-          width: double.infinity,
-          height: double.infinity,
+      // PERBAIKI: Gunakan YoutubePlayer langsung tanpa Scaffold untuk menghindari memory issues
+      return Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: Colors.black,
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
           child: YoutubePlayer(
             controller: _youtubeController!,
-            enableFullScreenOnVerticalDrag: false,
+            aspectRatio: 16 / 9,
           ),
         ),
       );

@@ -115,6 +115,8 @@ class _CourseDetailState extends State<CourseDetail> {
                                   videoUrl: courseDetail.activeLesson!.videoUrl,
                                 )
                               : Container(
+                                  width: double.infinity,
+                                  height: double.infinity,
                                   decoration: BoxDecoration(
                                     color: Colors.green.shade200,
                                     borderRadius: BorderRadius.circular(15),
@@ -139,24 +141,26 @@ class _CourseDetailState extends State<CourseDetail> {
                                 ),
                           // Show loading overlay when refreshing
                           if (courseDetailProvider.isLoading)
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: const Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                    ),
-                                    SizedBox(height: 10),
-                                    Text(
-                                      "Updating...",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ],
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: const Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CircularProgressIndicator(
+                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        "Updating...",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
