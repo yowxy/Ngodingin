@@ -26,18 +26,19 @@ class _SplashScreenState extends State<SplashScreen> {
       listen: false,
     );
     final token = await databaseProvider.getToken();
+    print("Token: $token");
 
     if (!mounted) return;
 
-    if (token == '' || token.isEmpty) {
+    if (token == '' || token.isEmpty || token == null) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const Homepage()),
+        MaterialPageRoute(builder: (context) => const LandingScreen()),
       );
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const LandingScreen()),
+        MaterialPageRoute(builder: (context) => const Homepage()),
       );
     }
   }

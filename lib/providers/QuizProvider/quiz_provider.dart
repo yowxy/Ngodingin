@@ -40,8 +40,8 @@ class QuizProvider extends ChangeNotifier {
       "time": timeInSeconds, // TAMBAH: Kirim waktu dalam detik
     };
     
-    print("Request URL: $url"); // Debug log
-    print("Request body: ${json.encode(body)}"); // Debug log
+    print("Request URL: $url"); 
+    print("Request body: ${json.encode(body)}"); 
 
     try {
       final req = await http.post(
@@ -55,8 +55,8 @@ class QuizProvider extends ChangeNotifier {
 
       _isSubmitting = false;
 
-      print("Response status: ${req.statusCode}"); // Debug log
-      print("Response body: ${req.body}"); // Debug log
+      print("Response status: ${req.statusCode}");
+      print("Response body: ${req.body}");
 
       if (req.statusCode == 200) {
         final res = json.decode(req.body) as Map<String, dynamic>;

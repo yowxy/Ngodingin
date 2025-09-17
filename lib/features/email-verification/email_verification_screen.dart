@@ -42,26 +42,6 @@ class EmailVerificationPages extends StatelessWidget {
             const SizedBox(height: 20),
 
             Text(
-              'Email',
-              style: blackTextStyle.copyWith(
-                fontWeight: semibold,
-                fontSize: 14,
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            CustomTextForm(
-              controller: emailController,
-              hintText: "Masukan email anda",
-              obscureText: false,
-              width: double.infinity,
-              height: 47,
-            ),
-
-            const SizedBox(height: 20),
-
-            Text(
               'Token',
               style: blackTextStyle.copyWith(
                 fontWeight: semibold,

@@ -114,7 +114,7 @@ class _HeaderState extends State<Header> {
                     ),
                   );
                 },
-                icon: Icon(LucideIcons.clipboardList, size: 28, color: greenColor),
+                icon: Icon(LucideIcons.clipboardList, size: 25, color: greenColor),
                 tooltip: "Mission",
               ),
               const SizedBox(width: 10),
