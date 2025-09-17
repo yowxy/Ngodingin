@@ -1,16 +1,49 @@
-# hology_fe
+# NgodingIn
 
-A new Flutter project.
+NgodingIn adalah aplikasi mobile berbasis Flutter yang dirancang untuk membantu pengguna belajar pemrograman secara interaktif.
+Aplikasi ini menyediakan berbagai kursus pemrograman (seperti Dart, Flutter, JavaScript, Python, dan lainnya) yang bisa diakses langsung melalui perangkat Android maupun IOS.
 
-## Getting Started
+Dengan fitur video pembelajaran, progress tracking, quest harian & mingguan, sistem enroll & favorite course, serta leaderboard, pengguna dapat belajar secara terstruktur sekaligus termotivasi untuk konsisten.
 
-This project is a starting point for a Flutter application.
+Aplikasi ini cocok untuk :
 
-A few resources to get you started if this is your first Flutter project:
+🧑‍🎓 Pelajar/mahasiswa yang ingin mempelajari dasar hingga lanjutan pemrograman.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+👨‍💻 Developer pemula yang ingin memahami konsep melalui kursus terarah.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+📱 Siapa saja yang ingin belajar coding secara fleksibel dari smartphone.
+
+
+## 🚀 Build & Run
+
+📌 Persyaratan
+
+Pastikan sudah menginstal :
+
+* Flutter SDK (versi >=3.9.0)
+* Dart SDK
+* Android Studio atau VS Code dengan Flutter plugin
+* Emulator Android/iOS atau perangkat fisik
+
+**Clone Repository**
+```bash
+git clone https://github.com/yowxy/Ngodingin
+cd Ngodingin
+```
+
+**Install Dependencies**
+```bash
+flutter pub get
+```
+
+**Jalankan Aplikasi di Emulator / Device**
+```bash
+flutter run
+```
+    
+## Authors
+
+**Tim Ayam Malay PENS**
+- [Iklil Najmi Hamzah](https://github.com/yowxy)
+- [Mifta Setya Pratama](https://github.com/MiftaSetya)
+- [Moch Djauharil Ilmi](https://github.com/mcDJIL)
