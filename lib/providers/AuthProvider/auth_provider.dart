@@ -5,6 +5,7 @@ import 'package:hology_fe/constants/url.dart';
 import 'package:hology_fe/features/chose_prefrences/chose.prefrences.dart';
 import 'package:hology_fe/features/forgot-password/reset_password_screen.dart';
 import 'package:hology_fe/features/home/screens/home.dart';
+import 'package:hology_fe/features/home/screens/homepage.dart';
 import 'package:hology_fe/providers/Database/db_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:hology_fe/features/auth/signin_pages.dart';
@@ -132,7 +133,7 @@ class AuthenticationProvider extends ChangeNotifier {
         DatabaseProvider().saveUserId(userId);
         Navigator.pushAndRemoveUntil(
           context!,
-          MaterialPageRoute(builder: (context) => const Home()),
+          MaterialPageRoute(builder: (context) => const Homepage()),
           (route) => false,
         );
       } else {

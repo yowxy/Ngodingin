@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hology_fe/features/home/screens/homepage.dart';
 import 'package:hology_fe/features/mission/widgets/list_mission.dart';
 import 'package:hology_fe/features/mission/widgets/list_mission_weekly.dart';
 import 'package:hology_fe/providers/QuestProvider/quest_provider.dart';
 import 'package:hology_fe/shared/theme.dart';
-import 'package:hology_fe/features/home/screens/home.dart';
 import 'package:provider/provider.dart';
 
 class Mission extends StatefulWidget {
@@ -44,7 +44,7 @@ class _MissionState extends State<Mission> with SingleTickerProviderStateMixin {
               icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
               onPressed: () {
                 Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => Home()),
+                  MaterialPageRoute(builder: (context) => const Homepage()),
                   (route) => false,
                 );
               },
