@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hology_fe/features/quiz/widget/buttonQuiz.dart';
 import 'package:hology_fe/features/quiz/widget/nextButton.dart';
@@ -25,21 +26,60 @@ class _QuizPagesState extends State<QuizPages> {
   late final List<QuizQuestion> _quizzes;
   int _current = 0;
   final Map<String, String> _answers = {}; // quizId -> selected choice
+  
+  // TAMBAH: Timer variables
+  late Timer _timer;
+  int _timeElapsedInSeconds = 0;
+  String _formattedTime = "00:00";
 
   @override
   void initState() {
     super.initState();
     _quizzes = widget.quizzesData.map((e) => QuizQuestion.fromJson(e)).toList();
+    
+    // TAMBAH: Start timer saat quiz dimulai
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    // TAMBAH: Cancel timer saat widget di-dispose
+    _timer.cancel();
+    super.dispose();
+  }
+
+  // TAMBAH: Method untuk start timer
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {
+          _timeElapsedInSeconds++;
+          _formattedTime = _formatTime(_timeElapsedInSeconds);
+        });
+      }
+    });
+  }
+
+  // TAMBAH: Method untuk format waktu ke MM:SS
+  String _formatTime(int seconds) {
+    final minutes = (seconds / 60).floor();
+    final remainingSeconds = seconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
   }
 
   void _onSubmit() async {
     print("_onSubmit called"); // Debug log
     print("Current answers: $_answers"); // Debug log
+    print("Time elapsed: $_timeElapsedInSeconds seconds"); // Debug log
+    
+    // TAMBAH: Stop timer saat submit
+    _timer.cancel();
     
     final provider = Provider.of<QuizProvider>(context, listen: false);
     final result = await provider.submitQuiz(
       lessonId: widget.lessonId,
       answers: _answers,
+      timeInSeconds: _timeElapsedInSeconds, // TAMBAH: Kirim waktu ke API
       context: context,
     );
     print("Submit result: $result"); // Debug log
@@ -53,13 +93,22 @@ class _QuizPagesState extends State<QuizPages> {
         barrierDismissible: false, // Prevent dismissing by tapping outside
         builder: (_) => AlertDialog(
           title: const Text('Hasil Quiz'),
-          content: Text('Skor: ${result.score}/${result.maxScore}\n${result.message}'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Skor: ${result.score}/${result.maxScore}'),
+              Text('Waktu: $_formattedTime'),
+              const SizedBox(height: 10),
+              Text(result.message),
+            ],
+          ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true); // Return true to indicate refresh needed
               },
-              child: const Text('Kembali ke Course'),
+              child: Text(result.nextLesson != null ? 'Lanjut ke Lesson Berikutnya' : 'Kembali ke Course'),
             ),
           ],
         ),
@@ -80,6 +129,7 @@ class _QuizPagesState extends State<QuizPages> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
+              _timer.cancel(); // Cancel timer jika back tanpa quiz
               Navigator.of(context).pop();
             },
           ),
@@ -95,7 +145,10 @@ class _QuizPagesState extends State<QuizPages> {
               const Text('Tidak ada quiz untuk lesson ini'),
               const SizedBox(height: 12),
               ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () {
+                  _timer.cancel(); // Cancel timer
+                  Navigator.of(context).pop();
+                },
                 child: const Text('Kembali'),
               ),
             ],
@@ -116,6 +169,7 @@ class _QuizPagesState extends State<QuizPages> {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
+                _timer.cancel(); // Cancel timer saat back
                 Navigator.of(context).pop();
               },
             ),
@@ -181,7 +235,7 @@ class _QuizPagesState extends State<QuizPages> {
                                   ),
                                 ),
                                 Text(
-                                  "01:45",
+                                  _formattedTime, // PERBAIKI: Gunakan timer aktif
                                   style: blackTextStyle.copyWith(
                                     fontWeight: bold,
                                     fontSize: 21,
@@ -338,7 +392,10 @@ class _QuizButton extends StatelessWidget {
             Expanded(
               child: Text(
                 text,
-                style: const TextStyle(fontSize: 18),
+                style: TextStyle(
+                  fontSize: 18,
+                  color: isSelected ? Colors.white : Colors.black,
+                ),
               ),
             ),
           ],

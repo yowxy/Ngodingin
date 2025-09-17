@@ -21,9 +21,10 @@ class QuizProvider extends ChangeNotifier {
   Future<CompleteQuizResult?> submitQuiz({
     required String lessonId,
     required Map<String, String> answers,
+    required int timeInSeconds, // TAMBAH: Parameter time
     BuildContext? context,
   }) async {
-    print("submitQuiz called with lessonId: $lessonId, answers: $answers"); // Debug log
+    print("submitQuiz called with lessonId: $lessonId, answers: $answers, time: $timeInSeconds"); // Debug log
     
     final token = await DatabaseProvider().getToken();
     print("Token: $token"); // Debug log
@@ -36,6 +37,7 @@ class QuizProvider extends ChangeNotifier {
     final body = {
       "lesson_id": lessonId,
       "answers": answers,
+      "time": timeInSeconds, // TAMBAH: Kirim waktu dalam detik
     };
     
     print("Request URL: $url"); // Debug log
