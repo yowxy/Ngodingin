@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hology_fe/features/mission/screens/mission.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:hology_fe/shared/theme.dart';
 import 'package:hology_fe/providers/HomeProvider/home_provider.dart';
@@ -51,7 +53,10 @@ class _HeaderState extends State<Header> {
     );
 
     if (result == 'logout') {
-      final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+      final authProvider = Provider.of<AuthenticationProvider>(
+        context,
+        listen: false,
+      );
       authProvider.logout(token: '', context: context);
     }
   }
@@ -95,29 +100,49 @@ class _HeaderState extends State<Header> {
               const SizedBox(height: 5),
             ],
           ),
-          GestureDetector(
-            onTap: () => _showLogoutMenu(context),
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const Mission(),
+                    ),
+                  );
+                },
+                icon: Icon(LucideIcons.clipboardList, size: 28, color: greenColor),
+                tooltip: "Mission",
               ),
-              child: ClipOval(
-                child: Image.asset(
-                  "assets/images/profile.png",
-                  height: 40,
-                  width: 40,
-                  fit: BoxFit.cover,
+              const SizedBox(width: 10),
+              GestureDetector(
+                onTap: () => _showLogoutMenu(context),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: ClipOval(
+                    child: Image.asset(
+                      "assets/images/profile.png",
+                      height: 40,
+                      width: 40,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         ],
       ),

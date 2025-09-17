@@ -5,6 +5,7 @@ import 'package:hology_fe/features/home/screens/course.dart';
 import 'package:hology_fe/features/home/screens/home.dart';
 import 'package:hology_fe/features/home/screens/profile.dart';
 import 'package:hology_fe/shared/theme.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -32,7 +33,9 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whitegreenColor,
+      backgroundColor: _selectedIndex == 3 
+        ? whiteColor 
+        : whitegreenColor,
       body: _screens[_selectedIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -41,6 +44,14 @@ class _HomepageState extends State<Homepage> {
             topLeft: Radius.circular(18),
             topRight: Radius.circular(18),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 0.5,
+              blurRadius: 10, 
+              offset: const Offset(0, 1),
+            ),
+          ],
         ),
         child: SafeArea(
           child: Padding(
@@ -57,8 +68,8 @@ class _HomepageState extends State<Homepage> {
               tabs: const [
                 GButton(icon: Icons.home, text: "Home"),
                 GButton(icon: Icons.menu_book, text: "Kursus"),
-                GButton(icon: Icons.chat, text: "Chatbot"),
-                GButton(icon: Icons.person, text: "Profil"),
+                GButton(icon: LucideIcons.bot, text: "Chatbot"),
+                GButton(icon: Icons.person, text: "Profile"),
               ],
             ),
           ),
