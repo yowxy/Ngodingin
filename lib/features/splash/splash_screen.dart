@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (!mounted) return;
 
-    if (token.isNotEmpty) {
+    if (token == '' || token.isEmpty) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const Homepage()),
