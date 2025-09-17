@@ -17,6 +17,17 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   @override
+  void initState() {
+    super.initState();
+    // Fetch data saat widget pertama kali dibuat
+    Future.microtask(() {
+      final homeDataProvider = Provider.of<HomeDataProvider>(context, listen: false);
+      homeDataProvider.fetchHomeData();
+      homeDataProvider.fetchCategories();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(

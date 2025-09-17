@@ -14,12 +14,27 @@ class ListChapter extends StatefulWidget {
 
 class _ListChapterState extends State<ListChapter> {
   Widget _buildActionButton(lesson, bool isActiveLesson, bool isUnlocked, CourseDetailProvider courseDetailProvider, bool hasActiveLesson) {
-    // CEK COMPLETED TERLEBIH DAHULU (sebelum cek unlocked)
-    if (lesson.isCompleted) {
+    // Cek apakah lesson sudah completed (progress.is_completed = true)
+    final bool isCompletedByProgress = lesson.progress?.isCompleted == true;
+    
+    print('DEBUG: Lesson ${lesson.title}');
+    print('DEBUG: - isCompleted (from lesson): ${lesson.isCompleted}');
+    print('DEBUG: - progress.is_completed: ${lesson.progress?.isCompleted}');
+    print('DEBUG: - isCompletedByProgress: $isCompletedByProgress');
+    print('DEBUG: - isActiveLesson: $isActiveLesson');
+    
+    // CEK COMPLETED TERLEBIH DAHULU - lesson yang sudah selesai (progress.is_completed = true)
+    if (isCompletedByProgress) {
       return GestureDetector(
-        onTap: () {
-          // Call setActiveLesson API to make this lesson active again
-          courseDetailProvider.setActiveLesson(lesson.id, context: context);
+        onTap: () async {
+          print('DEBUG: Completed lesson clicked - ID: ${lesson.id}, Title: ${lesson.title}');
+          try {
+            // Call setActiveLesson API to make this lesson active again
+            await courseDetailProvider.setActiveLesson(lesson.id, context: context);
+            print('DEBUG: setActiveLesson completed successfully');
+          } catch (e) {
+            print('DEBUG: setActiveLesson failed with error: $e');
+          }
         },
         child: Container(
           decoration: BoxDecoration(
@@ -33,7 +48,7 @@ class _ListChapterState extends State<ListChapter> {
       );
     }
 
-    // Locked lessons (SETELAH cek completed)
+    // Locked lessons - lesson yang belum bisa diakses
     if (!isUnlocked) {
       return Container(
         decoration: BoxDecoration(
@@ -58,7 +73,9 @@ class _ListChapterState extends State<ListChapter> {
             final quizzesRaw = await courseDetailProvider.finishLesson(lesson.id, context: context);
             print('quiz: $quizzesRaw');
             if (!mounted) return;
-            Navigator.push(
+            
+            // Navigate to quiz and wait for result
+            final needsRefresh = await Navigator.push<bool>(
               context,
               MaterialPageRoute(
                 builder: (_) => QuizPages(
@@ -67,6 +84,12 @@ class _ListChapterState extends State<ListChapter> {
                 ),
               ),
             );
+            
+            // If quiz completed and returned true, refresh course detail
+            if (needsRefresh == true) {
+              print('Refreshing course detail after quiz completion');
+              await courseDetailProvider.fetchCourseDetail();
+            }
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: orangeColor,
@@ -114,19 +137,28 @@ class _ListChapterState extends State<ListChapter> {
         
         // DEBUG: Print data lesson untuk melihat field apa saja yang ada
         print('DEBUG Chapter $sequence: ${chapter.toJson()}');
-        print('DEBUG isCompleted: ${chapter.isCompleted}');
         
         // Logika untuk menentukan apakah lesson terbuka
         final activeLesson = chapters.activeLesson;
         final isActiveLesson = activeLesson?.id == chapter.id;
         final hasActiveLesson = activeLesson != null;
         
+        // Cek apakah lesson sudah completed berdasarkan progress
+        final bool isCompletedByProgress = chapter.progress?.isCompleted == true;
+        
+        // Cek apakah lesson punya progress (artinya pernah diakses)
+        final bool hasProgress = chapter.progress != null;
+        
+        print('DEBUG: Lesson ${chapter.title} - hasProgress: $hasProgress, isCompletedByProgress: $isCompletedByProgress, isActiveLesson: $isActiveLesson');
+        
         // Lesson terbuka jika:
-        // 1. Sudah selesai
+        // 1. Sudah selesai (progress.is_completed = true)
         // 2. Adalah active lesson
         // 3. Lesson pertama dan user sudah enrolled
-        final isUnlocked = chapter.isCompleted ||
+        // 4. Lesson yang punya progress (pernah diakses) - TAMBAHAN INI
+        final isUnlocked = isCompletedByProgress ||
           isActiveLesson ||
+          hasProgress ||
           (index == 0 && chapters.isEnrolled);
 
         return Container(

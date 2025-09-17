@@ -43,24 +43,32 @@ class _QuizPagesState extends State<QuizPages> {
       context: context,
     );
     print("Submit result: $result"); // Debug log
+    
     if (!mounted) return;
+    
     if (result != null) {
-      showDialog(
+      // Show dialog and wait for user action
+      final shouldRefresh = await showDialog<bool>(
         context: context,
+        barrierDismissible: false, // Prevent dismissing by tapping outside
         builder: (_) => AlertDialog(
           title: const Text('Hasil Quiz'),
           content: Text('Skor: ${result.score}/${result.maxScore}\n${result.message}'),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close dialog
-                Navigator.of(context).pop(); // Back to course detail
+                Navigator.of(context).pop(true); // Return true to indicate refresh needed
               },
               child: const Text('Kembali ke Course'),
             ),
           ],
         ),
       );
+      
+      // If dialog returned true, go back to course detail with refresh flag
+      if (shouldRefresh == true && mounted) {
+        Navigator.of(context).pop(true); // Back to course detail with refresh flag
+      }
     }
   }
 

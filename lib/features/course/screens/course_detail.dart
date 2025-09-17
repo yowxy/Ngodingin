@@ -46,6 +46,10 @@ class _CourseDetailState extends State<CourseDetail> {
     final courseDetailProvider = Provider.of<CourseDetailProvider>(context);
     final courseDetail = courseDetailProvider.courseDetail;
 
+    // Debug log untuk tracking active lesson changes
+    print("CourseDetail build - Active lesson: ${courseDetail?.activeLesson?.title}");
+    print("CourseDetail build - Video URL: ${courseDetail?.activeLesson?.videoUrl}");
+
     if (courseDetailProvider.errorUiMessage != null) {
       return Scaffold(
         appBar: AppBar(
@@ -102,21 +106,62 @@ class _CourseDetailState extends State<CourseDetail> {
                   children: [
                     AspectRatio(
                       aspectRatio: 16 / 9,
-                      child: courseDetail?.activeLesson?.videoUrl != null
-                          ? CourseVideoPlayer(videoUrl: courseDetail!.activeLesson!.videoUrl)
-                          : Container(
+                      child: Stack(
+                        children: [
+                          // PENTING: Gunakan ValueKey berdasarkan video URL untuk force rebuild
+                          courseDetail?.activeLesson?.videoUrl != null
+                              ? CourseVideoPlayer(
+                                  key: ValueKey(courseDetail!.activeLesson!.videoUrl), // PENTING!
+                                  videoUrl: courseDetail.activeLesson!.videoUrl,
+                                )
+                              : Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.green.shade200,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: const Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.play_circle_fill,
+                                          color: Colors.white,
+                                          size: 64,
+                                        ),
+                                        SizedBox(height: 10),
+                                        Text(
+                                          "Pilih lesson untuk memulai",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                          // Show loading overlay when refreshing
+                          if (courseDetailProvider.isLoading)
+                            Container(
                               decoration: BoxDecoration(
-                                color: Colors.green.shade200,
+                                color: Colors.black.withOpacity(0.3),
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: const Center(
-                                child: Icon(
-                                  Icons.play_circle_fill,
-                                  color: Colors.white,
-                                  size: 64,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      "Updating...",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 25),
                     Container(

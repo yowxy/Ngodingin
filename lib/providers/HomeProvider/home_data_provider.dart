@@ -4,28 +4,37 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:hology_fe/constants/url.dart';
 import 'package:hology_fe/models/enrolled_course_model.dart';
+import 'package:hology_fe/models/course_model.dart';
 
 class HomeDataProvider extends ChangeNotifier {
   final requestBaseUrl = AppUrl.baseUrl;
-  List<Map<String, dynamic>> _recommendedCourses = [];
+  List<Course> _recommendedCourses = [];
   List<EnrolledCourse> _enrolledCourses = [];
-  List<Map<String, dynamic>> _allCourses = [];
+  List<Course> _allCourses = [];
   List<Map<String, dynamic>> _categories = [];
   bool _isLoading = false;
-  String _selectedCategory = '';
+  String? _selectedCategory; // Ubah jadi nullable
   String _searchQuery = '';
 
-  List<Map<String, dynamic>> get recommendedCourses => _recommendedCourses;
+  List<Course> get recommendedCourses => _recommendedCourses;
   List<EnrolledCourse> get enrolledCourses => _enrolledCourses;
-  List<Map<String, dynamic>> get allCourses => _allCourses;
+  List<Course> get allCourses => _allCourses;
   List<Map<String, dynamic>> get categories => _categories;
   bool get isLoading => _isLoading;
-  String get selectedCategory => _selectedCategory;
+  String? get selectedCategory => _selectedCategory;
   String get searchQuery => _searchQuery;
 
+  // Method lama untuk backward compatibility
   void setCategory(String categoryId) {
+    _selectedCategory = categoryId.isEmpty ? null : categoryId;
+    fetchCoursesByCategory(_selectedCategory);
+    notifyListeners();
+  }
+
+  // Method baru untuk API getCoursesByCategory
+  void setCategoryWithApi(String? categoryId) {
     _selectedCategory = categoryId;
-    fetchCoursesByCategory(categoryId);
+    fetchCoursesByCategoryApi(categoryId);
     notifyListeners();
   }
 
@@ -56,14 +65,14 @@ class HomeDataProvider extends ChangeNotifier {
         final data = res['data'];
         final List<dynamic> recommendedList = data['recommended_courses'] ?? [];
         _recommendedCourses = recommendedList
-            .map((e) => Map<String, dynamic>.from(e))
+            .map((e) => Course.fromJson(e))
             .toList();
         final List<dynamic> enrolledList = data['enrolled_courses'] ?? [];
         _enrolledCourses = enrolledList
             .map((e) => EnrolledCourse.fromJson(e))
             .toList();
         final List<dynamic> allList = data['all_courses'] ?? [];
-        _allCourses = allList.map((e) => Map<String, dynamic>.from(e)).toList();
+        _allCourses = allList.map((e) => Course.fromJson(e)).toList();
       } else {
         _recommendedCourses = [];
         _enrolledCourses = [];
@@ -93,14 +102,16 @@ class HomeDataProvider extends ChangeNotifier {
         final data = res['data'];
         final List<dynamic> recommendedList = data['recommended_courses'] ?? [];
         _recommendedCourses = recommendedList
-            .map((e) => Map<String, dynamic>.from(e))
+            .map((e) => Course.fromJson(e))
             .toList();
+
+            print('Recommended Courses: $_recommendedCourses');
         final List<dynamic> enrolledList = data['enrolled_courses'] ?? [];
         _enrolledCourses = enrolledList
             .map((e) => EnrolledCourse.fromJson(e))
             .toList();
         final List<dynamic> allList = data['all_courses'] ?? [];
-        _allCourses = allList.map((e) => Map<String, dynamic>.from(e)).toList();
+        _allCourses = allList.map((e) => Course.fromJson(e)).toList();
       } else {
         _recommendedCourses = [];
         _enrolledCourses = [];
@@ -152,12 +163,74 @@ class HomeDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchCoursesByCategory(String categoryId) async {
+  // Method baru untuk API getCoursesByCategory
+  Future<void> fetchCoursesByCategoryApi(String? categoryId) async {
     _isLoading = true;
     notifyListeners();
 
     String url;
-    if (categoryId.isEmpty) {
+    if (categoryId == null) {
+      // Untuk "Semua", panggil endpoint tanpa categoryId
+      url = "$requestBaseUrl/home/category";
+    } else {
+      // Untuk category tertentu
+      url = "$requestBaseUrl/home/category/$categoryId";
+    }
+
+    print("API URL: $url");
+    print("Category ID: $categoryId");
+    final token = await DatabaseProvider().getToken();
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      print("Response status: ${response.statusCode}");
+      print("Response body: ${response.body}");
+
+      if (response.statusCode == 200) {
+        final res = json.decode(response.body);
+        final data = res['data'];
+
+        final List<dynamic> recommendedList = data['recommended_courses'] ?? [];
+        _recommendedCourses = recommendedList
+            .map((e) => Course.fromJson(e))
+            .toList();
+
+        final List<dynamic> enrolledList = data['enrolled_courses'] ?? [];
+        _enrolledCourses = enrolledList
+            .map((e) => EnrolledCourse.fromJson(e))
+            .toList();
+
+        final List<dynamic> allList = data['all_courses'] ?? [];
+        _allCourses = allList.map((e) => Course.fromJson(e)).toList();
+
+        print("Fetched courses - Recommended: ${_recommendedCourses.length}, Enrolled: ${_enrolledCourses.length}, All: ${_allCourses.length}");
+      } else {
+        _recommendedCourses = [];
+        _enrolledCourses = [];
+        _allCourses = [];
+      }
+    } catch (e) {
+      print("Error fetching courses by category: $e");
+      _recommendedCourses = [];
+      _enrolledCourses = [];
+      _allCourses = [];
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  // Method lama untuk backward compatibility
+  Future<void> fetchCoursesByCategory(String? categoryId) async {
+    _isLoading = true;
+    notifyListeners();
+
+    String url;
+    if (categoryId == null || categoryId.isEmpty) {
       url = "$requestBaseUrl/courses";
     } else {
       url = "$requestBaseUrl/home/category/$categoryId";
@@ -179,14 +252,14 @@ class HomeDataProvider extends ChangeNotifier {
 
         List<dynamic> courseList;
 
-        if (categoryId.isEmpty) {
+        if (categoryId == null || categoryId.isEmpty) {
           courseList = data is List ? data : (data['courses'] ?? []);
         } else {
           courseList = data['courses'] ?? [];
         }
 
         _allCourses = courseList
-            .map((e) => Map<String, dynamic>.from(e))
+            .map((e) => Course.fromJson(e))
             .toList();
         _recommendedCourses = _allCourses;
       } else {

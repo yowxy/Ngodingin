@@ -18,13 +18,14 @@ class _CategoryCourseSliderState extends State<CategoryCourseSlider> {
     Future.microtask(() async {
       final provider = Provider.of<HomeDataProvider>(context, listen: false);
       await provider.fetchCategories();
-      await provider.fetchHomeData();
 
+      // Default fetch dengan categoryId null (semua)
       if (provider.categories.isNotEmpty) {
         setState(() {
-          _selectedIndex = 0;
+          _selectedIndex = 0; // "Semua" adalah index 0
         });
-        provider.setCategory(provider.categories[0]['id']);
+        // Untuk "Semua", kirim null sebagai categoryId
+        provider.setCategoryWithApi(null);
       }
     });
   }
@@ -50,7 +51,11 @@ class _CategoryCourseSliderState extends State<CategoryCourseSlider> {
               setState(() {
                 _selectedIndex = index;
               });
-              homeDataProvider.setCategory(category['id'] ?? null);
+
+              // Jika index 0 ("Semua"), kirim null
+              // Jika index lain, kirim category id
+              final categoryId = index == 0 ? null : category['id'];
+              homeDataProvider.setCategoryWithApi(categoryId);
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),

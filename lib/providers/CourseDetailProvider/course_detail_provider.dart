@@ -285,8 +285,12 @@ class CourseDetailProvider extends ChangeNotifier {
     _resMessage = null;
     notifyListeners();
 
-    final url = "$requestBaseUrl/courses/set-active-lesson";
+    final url = "$requestBaseUrl/lessons/set-active";
     final body = {"lesson_id": lessonId};
+
+    print("DEBUG setActiveLesson - URL: $url");
+    print("DEBUG setActiveLesson - Body: $body");
+    print("DEBUG setActiveLesson - Token: $token");
 
     try {
       http.Response req = await http.post(
@@ -298,33 +302,48 @@ class CourseDetailProvider extends ChangeNotifier {
         },
       );
 
+      print("DEBUG setActiveLesson - Status: ${req.statusCode}");
+      print("DEBUG setActiveLesson - Response: ${req.body}");
+
       if (req.statusCode == 200 || req.statusCode == 201) {
         final res = json.decode(req.body);
         _isLoading = false;
         _resMessage = res['message'] ?? "Active lesson berhasil diubah";
         notifyListeners();
 
+        print("DEBUG setActiveLesson - Success, refreshing course detail");
+        // Refresh course detail untuk update active lesson dan video player
         await fetchCourseDetail();
 
-        successMessage(message: _resMessage, context: context);
+        if (context != null && context.mounted) {
+          successMessage(message: _resMessage, context: context);
+        }
       } else {
         final res = json.decode(req.body);
         _isLoading = false;
         _resMessage = res['message'] ?? "Gagal mengubah active lesson";
         notifyListeners();
-        errorMessage(message: _resMessage, context: context);
+        print("DEBUG setActiveLesson - Error response: $res");
+        if (context != null && context.mounted) {
+          errorMessage(message: _resMessage, context: context);
+        }
       }
-    } on SocketException catch (_) {
+    } on SocketException catch (e) {
       _isLoading = false;
       _resMessage = "Koneksi internet tidak tersedia";
       notifyListeners();
-      errorMessage(message: _resMessage, context: context);
+      print("DEBUG setActiveLesson - Socket error: $e");
+      if (context != null && context.mounted) {
+        errorMessage(message: _resMessage, context: context);
+      }
     } catch (e) {
       _isLoading = false;
       _resMessage = "Terjadi kesalahan, silakan coba lagi";
       notifyListeners();
-      print("Set active lesson error: $e");
-      errorMessage(message: _resMessage, context: context);
+      print("DEBUG setActiveLesson - General error: $e");
+      if (context != null && context.mounted) {
+        errorMessage(message: _resMessage, context: context);
+      }
     }
   }
 
