@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:hology_fe/models/favorite_course_model.dart';
 import 'package:hology_fe/providers/Database/db_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -315,15 +316,19 @@ class HomeDataProvider extends ChangeNotifier {
             
         print("Fetched courses - Recommended: ${_recommendedCourses.length}, Favorite: ${_favoriteCourses.length}, All: ${_allCourses.length}");
       } else {
-        _allCourses = [];
         _recommendedCourses = [];
         _favoriteCourses = [];
-      }
+        _enrolledCourses = [];
+        _favoriteCourses = [];
+        _allCourses = [];
+  }
     } catch (e) {
       print("Error fetching courses: $e");
-      _allCourses = [];
       _recommendedCourses = [];
       _favoriteCourses = [];
+      _enrolledCourses = [];
+      _favoriteCourses = [];
+      _allCourses = [];
     }
 
     _isLoading = false;

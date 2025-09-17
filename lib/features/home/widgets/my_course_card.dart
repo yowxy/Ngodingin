@@ -68,17 +68,13 @@ class _MyCourseCardState extends State<MyCourseCard> {
                   children: [
                     Text(
                       course.title,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: semibold,
-                      ),
+                      style: TextStyle(fontSize: 16, fontWeight: semibold),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       "Total video : ${course.totalVideo}",
-                      style:
-                          const TextStyle(fontSize: 12, color: Colors.grey),
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                     const SizedBox(height: 10),
                     LayoutBuilder(
@@ -107,7 +103,8 @@ class _MyCourseCardState extends State<MyCourseCard> {
                       children: [
                         Expanded(
                           child: Text(
-                            course.activeLesson?.title ?? "Belum ada lesson aktif",
+                            course.activeLesson?.title ??
+                                "Belum ada lesson aktif",
                             style: TextStyle(fontSize: 12, color: lightGrey),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
