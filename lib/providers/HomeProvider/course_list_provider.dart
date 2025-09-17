@@ -81,9 +81,14 @@ class CourseListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addFavorite(String courseId) async {
+  // PERBAIKI: Add favorite dengan API yang benar
+  Future<bool> addFavorite(String courseId) async {
     final url = "$requestBaseUrl/favorite-courses";
     final token = await DatabaseProvider().getToken();
+    
+    print("Adding to favorite - Course ID: $courseId");
+    print("API URL: $url");
+    
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -93,23 +98,114 @@ class CourseListProvider extends ChangeNotifier {
         },
         body: json.encode({'course_id': courseId}),
       );
+      
+      print("Add favorite response status: ${response.statusCode}");
+      print("Add favorite response body: ${response.body}");
+      
       if (response.statusCode == 201) {
+        final res = json.decode(response.body);
+        if (res['success'] == true) {
+          _favoriteCourseIds.add(courseId);
+          notifyListeners();
+          return true;
+        }
+      } else if (response.statusCode == 409) {
+        // Course sudah di favorit
+        final res = json.decode(response.body);
+        print("Course already in favorites: ${res['message']}");
         _favoriteCourseIds.add(courseId);
         notifyListeners();
+        return false; // Return false untuk menunjukkan sudah ada
       }
-      // Optional: handle error response
     } catch (e) {
-      // Optional: handle error
+      print("Error adding to favorite: $e");
     }
+    return false;
   }
 
-  void toggleFavorite(String courseId) {
-    if (_favoriteCourseIds.contains(courseId)) {
-      _favoriteCourseIds.remove(courseId);
-      notifyListeners();
-      // TODO: implement remove favorite API if available
-    } else {
-      addFavorite(courseId);
+  // PERBAIKI: Remove favorite dengan API yang benar
+  Future<bool> removeFavorite(String courseId) async {
+    final url = "$requestBaseUrl/favorite-courses/$courseId";
+    final token = await DatabaseProvider().getToken();
+    
+    print("Removing from favorite - Course ID: $courseId");
+    print("API URL: $url");
+    
+    try {
+      final response = await http.delete(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+      
+      print("Remove favorite response status: ${response.statusCode}");
+      print("Remove favorite response body: ${response.body}");
+      
+      if (response.statusCode == 200) {
+        final res = json.decode(response.body);
+        if (res['success'] == true) {
+          _favoriteCourseIds.remove(courseId);
+          notifyListeners();
+          return true;
+        }
+      } else if (response.statusCode == 404) {
+        // Course tidak ditemukan di favorit, tapi tetap remove dari local state
+        _favoriteCourseIds.remove(courseId);
+        notifyListeners();
+        return true;
+      }
+    } catch (e) {
+      print("Error removing from favorite: $e");
+    }
+    return false;
+  }
+
+  // PERBAIKI: Toggle favorite dengan proper API calls
+  Future<bool> toggleFavorite(String courseId) async {
+  if (_favoriteCourseIds.contains(courseId)) {
+    // Remove dari favorite
+    final success = await removeFavorite(courseId);
+    return success;
+  } else {
+    // Add ke favorite
+    final success = await addFavorite(courseId);
+    return success;
+  }
+}
+
+  // Helper method untuk cek apakah course di favorite
+  bool isFavorite(String courseId) {
+    return _favoriteCourseIds.contains(courseId);
+  }
+
+  // Method untuk fetch favorite status dari server
+  Future<void> fetchFavoriteStatus() async {
+    final token = await DatabaseProvider().getToken();
+    final url = "$requestBaseUrl/favorite-courses";
+    
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+      
+      if (response.statusCode == 200) {
+        final res = json.decode(response.body);
+        final List<dynamic> favorites = res['data'] ?? [];
+        
+        // Extract course IDs dari favorite courses
+        _favoriteCourseIds = favorites
+            .map<String>((fav) => fav['course_id'] ?? fav['id'] ?? '')
+            .where((id) => id.isNotEmpty)
+            .toSet();
+            
+        notifyListeners();
+        print("Fetched favorite course IDs: $_favoriteCourseIds");
+      }
+    } catch (e) {
+      print("Error fetching favorite status: $e");
     }
   }
 }

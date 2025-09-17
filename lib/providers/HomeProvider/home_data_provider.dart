@@ -5,19 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:hology_fe/constants/url.dart';
 import 'package:hology_fe/models/enrolled_course_model.dart';
 import 'package:hology_fe/models/course_model.dart';
+import 'package:hology_fe/models/favorite_course_model.dart'; // Tambah import
 
 class HomeDataProvider extends ChangeNotifier {
   final requestBaseUrl = AppUrl.baseUrl;
   List<Course> _recommendedCourses = [];
   List<EnrolledCourse> _enrolledCourses = [];
+  List<FavoriteCourse> _favoriteCourses = []; // Tambah favorite courses
   List<Course> _allCourses = [];
   List<Map<String, dynamic>> _categories = [];
   bool _isLoading = false;
-  String? _selectedCategory; // Ubah jadi nullable
+  String? _selectedCategory;
   String _searchQuery = '';
 
   List<Course> get recommendedCourses => _recommendedCourses;
   List<EnrolledCourse> get enrolledCourses => _enrolledCourses;
+  List<FavoriteCourse> get favoriteCourses => _favoriteCourses; // Getter untuk favorite courses
   List<Course> get allCourses => _allCourses;
   List<Map<String, dynamic>> get categories => _categories;
   bool get isLoading => _isLoading;
@@ -63,24 +66,38 @@ class HomeDataProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         final res = json.decode(response.body);
         final data = res['data'];
+        
         final List<dynamic> recommendedList = data['recommended_courses'] ?? [];
         _recommendedCourses = recommendedList
             .map((e) => Course.fromJson(e))
             .toList();
+            
         final List<dynamic> enrolledList = data['enrolled_courses'] ?? [];
         _enrolledCourses = enrolledList
             .map((e) => EnrolledCourse.fromJson(e))
             .toList();
+            
+        // Tambah parsing favorite courses
+        final List<dynamic> favoriteList = data['favorite_courses'] ?? [];
+        _favoriteCourses = favoriteList
+            .map((e) => FavoriteCourse.fromJson(e))
+            .toList();
+            
         final List<dynamic> allList = data['all_courses'] ?? [];
         _allCourses = allList.map((e) => Course.fromJson(e)).toList();
+        
+        print('Search - Recommended: ${_recommendedCourses.length}, Enrolled: ${_enrolledCourses.length}, Favorite: ${_favoriteCourses.length}, All: ${_allCourses.length}');
       } else {
         _recommendedCourses = [];
         _enrolledCourses = [];
+        _favoriteCourses = [];
         _allCourses = [];
       }
     } catch (e) {
+      print("Error fetching search data: $e");
       _recommendedCourses = [];
       _enrolledCourses = [];
+      _favoriteCourses = [];
       _allCourses = [];
     }
     _isLoading = false;
@@ -100,26 +117,40 @@ class HomeDataProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         final res = json.decode(response.body);
         final data = res['data'];
+        
         final List<dynamic> recommendedList = data['recommended_courses'] ?? [];
         _recommendedCourses = recommendedList
             .map((e) => Course.fromJson(e))
             .toList();
 
-            print('Recommended Courses: $_recommendedCourses');
+        print('Recommended Courses: $_recommendedCourses');
+        
         final List<dynamic> enrolledList = data['enrolled_courses'] ?? [];
         _enrolledCourses = enrolledList
             .map((e) => EnrolledCourse.fromJson(e))
             .toList();
+            
+        // Tambah parsing favorite courses
+        final List<dynamic> favoriteList = data['favorite_courses'] ?? [];
+        _favoriteCourses = favoriteList
+            .map((e) => FavoriteCourse.fromJson(e))
+            .toList();
+            
         final List<dynamic> allList = data['all_courses'] ?? [];
         _allCourses = allList.map((e) => Course.fromJson(e)).toList();
+        
+        print('Home Data - Recommended: ${_recommendedCourses.length}, Enrolled: ${_enrolledCourses.length}, Favorite: ${_favoriteCourses.length}, All: ${_allCourses.length}');
       } else {
         _recommendedCourses = [];
         _enrolledCourses = [];
+        _favoriteCourses = [];
         _allCourses = [];
       }
     } catch (e) {
+      print("Error fetching home data: $e");
       _recommendedCourses = [];
       _enrolledCourses = [];
+      _favoriteCourses = [];
       _allCourses = [];
     }
     _isLoading = false;
@@ -204,19 +235,27 @@ class HomeDataProvider extends ChangeNotifier {
             .map((e) => EnrolledCourse.fromJson(e))
             .toList();
 
+        // Tambah parsing favorite courses
+        final List<dynamic> favoriteList = data['favorite_courses'] ?? [];
+        _favoriteCourses = favoriteList
+            .map((e) => FavoriteCourse.fromJson(e))
+            .toList();
+
         final List<dynamic> allList = data['all_courses'] ?? [];
         _allCourses = allList.map((e) => Course.fromJson(e)).toList();
 
-        print("Fetched courses - Recommended: ${_recommendedCourses.length}, Enrolled: ${_enrolledCourses.length}, All: ${_allCourses.length}");
+        print("Fetched courses by category - Recommended: ${_recommendedCourses.length}, Enrolled: ${_enrolledCourses.length}, Favorite: ${_favoriteCourses.length}, All: ${_allCourses.length}");
       } else {
         _recommendedCourses = [];
         _enrolledCourses = [];
+        _favoriteCourses = [];
         _allCourses = [];
       }
     } catch (e) {
       print("Error fetching courses by category: $e");
       _recommendedCourses = [];
       _enrolledCourses = [];
+      _favoriteCourses = [];
       _allCourses = [];
     }
 
@@ -251,28 +290,122 @@ class HomeDataProvider extends ChangeNotifier {
         print("Data: $data");
 
         List<dynamic> courseList;
+        List<dynamic> favoriteList = [];
 
         if (categoryId == null || categoryId.isEmpty) {
           courseList = data is List ? data : (data['courses'] ?? []);
+          // Coba ambil favorite courses jika ada
+          if (data is Map<String, dynamic>) {
+            favoriteList = data['favorite_courses'] ?? [];
+          }
         } else {
           courseList = data['courses'] ?? [];
+          favoriteList = data['favorite_courses'] ?? [];
         }
 
         _allCourses = courseList
             .map((e) => Course.fromJson(e))
             .toList();
         _recommendedCourses = _allCourses;
+        
+        // Parse favorite courses
+        _favoriteCourses = favoriteList
+            .map((e) => FavoriteCourse.fromJson(e))
+            .toList();
+            
+        print("Fetched courses - Recommended: ${_recommendedCourses.length}, Favorite: ${_favoriteCourses.length}, All: ${_allCourses.length}");
       } else {
         _allCourses = [];
         _recommendedCourses = [];
+        _favoriteCourses = [];
       }
     } catch (e) {
       print("Error fetching courses: $e");
       _allCourses = [];
       _recommendedCourses = [];
+      _favoriteCourses = [];
     }
 
     _isLoading = false;
     notifyListeners();
+  }
+
+  // TAMBAH: Method untuk manage favorite courses
+  Future<bool> addToFavorite(String courseId) async {
+    final token = await DatabaseProvider().getToken();
+    String url = "$requestBaseUrl/favorite-courses";
+    
+    print("Adding to favorite - Course ID: $courseId");
+    
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({'course_id': courseId}),
+      );
+      
+      print("Add favorite response status: ${response.statusCode}");
+      print("Add favorite response body: ${response.body}");
+      
+      if (response.statusCode == 201) {
+        final res = json.decode(response.body);
+        if (res['success'] == true) {
+          // Refresh data setelah berhasil menambah favorite
+          await fetchHomeData();
+          return true;
+        }
+      } else if (response.statusCode == 409) {
+        // Course sudah di favorit
+        print("Course already in favorites");
+        return false;
+      }
+    } catch (e) {
+      print("Error adding to favorite: $e");
+    }
+    return false;
+  }
+
+  Future<bool> removeFromFavorite(String courseId) async {
+    final token = await DatabaseProvider().getToken();
+    String url = "$requestBaseUrl/favorite-courses/$courseId";
+    
+    print("Removing from favorite - Course ID: $courseId");
+    
+    try {
+      final response = await http.delete(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+      
+      print("Remove favorite response status: ${response.statusCode}");
+      print("Remove favorite response body: ${response.body}");
+      
+      if (response.statusCode == 200) {
+        final res = json.decode(response.body);
+        if (res['success'] == true) {
+          // Refresh data setelah berhasil menghapus favorite
+          await fetchHomeData();
+          return true;
+        }
+      } else if (response.statusCode == 404) {
+        // Course tidak ditemukan di favorit, tapi tetap refresh
+        await fetchHomeData();
+        return true;
+      }
+    } catch (e) {
+      print("Error removing from favorite: $e");
+    }
+    return false;
+  }
+
+  // Helper method untuk cek apakah course sudah di-favorite
+  bool isFavorite(String courseId) {
+    return _favoriteCourses.any((course) => course.id == courseId);
   }
 }

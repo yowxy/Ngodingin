@@ -37,31 +37,16 @@ class _MissionState extends State<Mission> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Row(
-          children: [
-            IconButton(
-              icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
-              onPressed: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const Homepage()),
-                  (route) => false,
-                );
-              },
+          title: Text(
+            "Misi",
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: semibold,
+              fontSize: 18,
             ),
-            SizedBox(width: 4),
-            Text(
-              "Misi",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: semibold,
-                fontSize: 18,
-              ),
-            ),
-          ],
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
       body: SafeArea(
         child: Container(
           color: whitegreenColor,

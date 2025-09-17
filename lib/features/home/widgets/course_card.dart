@@ -5,6 +5,7 @@ import 'package:hology_fe/providers/CourseDetailProvider/course_detail_provider.
 import 'package:hology_fe/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:hology_fe/providers/HomeProvider/course_list_provider.dart';
+import 'package:hology_fe/utils/snack_message.dart'; // Import custom snack message
 
 class CourseCard extends StatefulWidget {
   const CourseCard({super.key});
@@ -14,8 +15,15 @@ class CourseCard extends StatefulWidget {
 }
 
 class _CourseCardState extends State<CourseCard> {
-  // simpan state love per index
-  final Set<int> _lovedCourses = {};
+  @override
+  void initState() {
+    super.initState();
+    // Fetch favorite status saat widget dimuat
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final courseProvider = Provider.of<CourseListProvider>(context, listen: false);
+      courseProvider.fetchFavoriteStatus();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +44,7 @@ class _CourseCardState extends State<CourseCard> {
       itemCount: courses.length,
       itemBuilder: (context, index) {
         final course = courses[index];
-        final isLoved = _lovedCourses.contains(index);
+        final isLoved = courseProvider.isFavorite(course.id);
 
         return GestureDetector(
           onTap: () {
@@ -79,6 +87,17 @@ class _CourseCardState extends State<CourseCard> {
                                 width: 115,
                                 height: 115,
                                 fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    width: 115,
+                                    height: 115,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: const Icon(Icons.image_not_supported),
+                                  );
+                                },
                               ),
                             )
                           : Container(
@@ -127,14 +146,43 @@ class _CourseCardState extends State<CourseCard> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {
-                    setState(() {
-                      if (isLoved) {
-                        _lovedCourses.remove(index);
+                  onPressed: () async {
+                    // Show loading indicator saat toggle favorite
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+
+                    // Store nilai isLoved sebelum toggle
+                    final wasLoved = isLoved;
+
+                    // Toggle favorite via API
+                    final success = await courseProvider.toggleFavorite(course.id);
+                    
+                    // Close loading dialog
+                    if (mounted) {
+                      Navigator.of(context).pop();
+                    }
+
+                    // PERBAIKI: Gunakan custom snack message
+                    if (mounted) {
+                      if (success) {
+                        // Berhasil toggle favorite
+                        final message = wasLoved 
+                            ? 'Kursus berhasil dihapus dari favorit' 
+                            : 'Kursus berhasil ditambahkan ke favorit';
+                        successMessage(message: message, context: context);
                       } else {
-                        _lovedCourses.add(index);
+                        // Gagal toggle favorite
+                        final message = wasLoved
+                            ? 'Gagal menghapus kursus dari favorit'
+                            : 'Kursus sudah ada di favorit atau gagal menambahkan';
+                        errorMessage(message: message, context: context);
                       }
-                    });
+                    }
                   },
                   icon: Icon(
                     isLoved ? Icons.favorite : Icons.favorite_border,
