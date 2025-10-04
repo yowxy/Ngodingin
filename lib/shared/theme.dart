@@ -4,6 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 TextStyle blackTextStyle = GoogleFonts.poppins(
   color: blackColor,
 );
+TextStyle bblackTextStyle = GoogleFonts.poppins(
+  color: blackColor,
+);
 
 TextStyle whiteTextStyle = GoogleFonts.poppins(
   color: whiteColor,
